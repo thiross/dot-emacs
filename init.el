@@ -101,6 +101,22 @@
 	    'helm-select-action)
   (helm-mode 1))
 
+(if (executable-find "ag")
+    (use-package helm-ag
+      :ensure t))
+
+(use-package lua-mode
+  :ensure t)
+
+(use-package cmake-mode
+  :ensure t)
+
+(use-package glsl-mode
+  :ensure t)
+
+(use-package markdown-mode
+  :ensure t)
+
 (zale-config-lang&font)
 (zale-config-gui)
 (zale-config-file)
