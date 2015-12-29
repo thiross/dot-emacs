@@ -18,7 +18,7 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'gb18030)
   (modify-coding-system-alist 'process "ghci" 'gb18030)
-  (let ((en-font "Source Code Pro-9"))
+  (let ((en-font "Consolas-10"))
     (cond
      ((eq system-type 'darwin)
       (setq en-font "Monaco-11")))
@@ -77,10 +77,19 @@
 
 (package-initialize)
 
-;; (use-package leuven-theme
-;;   :ensure t)
+(use-package leuven-theme
+  :ensure t
+  :defer t)
+
+(use-package solarized-theme
+  :ensure t
+  :defer t)
 
 (use-package monokai-theme
+  :ensure t
+  :defer t)
+
+(use-package molokai-theme
   :ensure t)
 
 (use-package magit
@@ -115,6 +124,9 @@
   :ensure t)
 
 (use-package glsl-mode
+  :ensure t)
+
+(use-package haskell-mode
   :ensure t)
 
 (use-package markdown-mode
