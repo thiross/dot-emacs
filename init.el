@@ -78,7 +78,10 @@
 
 (package-initialize)
 
-(use-package leuven-theme
+;; (use-package leuven-theme
+;;   :ensure t)
+
+(use-package monokai-theme
   :ensure t)
 
 (use-package magit
