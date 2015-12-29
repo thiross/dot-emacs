@@ -18,14 +18,13 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'gb18030)
   (modify-coding-system-alist 'process "ghci" 'gb18030)
-  (let ((en-font "Source Code Pro Semibold-9"))
+  (let ((en-font "Source Code Pro-9"))
     (cond
      ((eq system-type 'darwin)
       (setq en-font "Monaco-11")))
     (set-frame-font en-font))
   (let ((spec (font-spec :family "Microsoft Yahei" :size 12)))
-    (set-fontset-font (frame-parameter nil 'font)
-		      'han spec)
+    (set-fontset-font (frame-parameter nil 'font) 'han spec)
     (set-fontset-font (frame-parameter nil 'font) 'symbol spec)
     (set-fontset-font (frame-parameter nil 'font) 'cjk-misc spec)
     (set-fontset-font (frame-parameter nil 'font) 'bopomofo spec)))
@@ -104,6 +103,10 @@
 (if (executable-find "ag")
     (use-package helm-ag
       :ensure t))
+
+(use-package auctex
+  :ensure t
+  :defer t)
 
 (use-package lua-mode
   :ensure t)
