@@ -23,15 +23,12 @@
      ((eq system-type 'darwin)
       (setq en-font "Monaco-11")))
     (set-frame-font en-font))
-  (let ((cn-font "Microsoft Yahei") (cn-size 12))
+  (let ((spec (font-spec :family "Microsoft Yahei" :size 12)))
     (set-fontset-font (frame-parameter nil 'font)
-		      'han (font-spec :family cn-font :size cn-size))
-    (set-fontset-font (frame-parameter nil 'font)
-		      'symbol (font-spec :family cn-font :size cn-size))
-    (set-fontset-font (frame-parameter nil 'font)
-		      'cjk-misc (font-spec :family cn-font :size cn-size))
-    (set-fontset-font (frame-parameter nil 'font)
-		      'bopomofo (font-spec :family cn-font :size cn-size))))
+		      'han spec)
+    (set-fontset-font (frame-parameter nil 'font) 'symbol spec)
+    (set-fontset-font (frame-parameter nil 'font) 'cjk-misc spec)
+    (set-fontset-font (frame-parameter nil 'font) 'bopomofo spec)))
 
 (defun zale-config-gui ()
   ;; disable menu bar
@@ -76,7 +73,7 @@
 ;; bind keys globally
 (defun zale-bind-global-keys ()
   (bind-key "M-/" 'hippie-expand)
-  (bind-key [?\S- ] 'set-mark-command)
+  (bind-key "S-SPC" 'set-mark-command)
   (bind-key "C-o" 'zale-open-line))
 
 (package-initialize)
