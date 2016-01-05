@@ -18,7 +18,7 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'gb18030)
   (modify-coding-system-alist 'process "ghci" 'gb18030)
-  (let ((en-font "Consolas-10"))
+  (let ((en-font "Source Code Pro-9"))
     (cond
      ((eq system-type 'darwin)
       (setq en-font "Monaco-11")))
@@ -102,14 +102,16 @@
 
 (use-package solarized-theme
   :ensure t
-  :defer t)
+  :config
+  (load-theme 'solarized-dark t))
 
 (use-package monokai-theme
   :ensure t
   :defer t)
 
 (use-package molokai-theme
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package magit
   :ensure t
@@ -146,7 +148,10 @@
   :ensure t)
 
 (use-package haskell-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+  (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
 
 (use-package ghc
   :ensure t
