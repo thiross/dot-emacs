@@ -75,6 +75,25 @@
   (bind-key "S-SPC" 'set-mark-command)
   (bind-key "C-o" 'zale-open-line))
 
+(defun zale-add-path (path)
+  (if (and path
+	   (not (member path exec-path)))
+      (add-to-list 'exec-path path)))
+
+(defun zale-setup-stack ()
+  (if (executable-find "stack")
+      (let ((output (shell-command-to-string "stack path"))
+	    (table (make-hash-table :test 'equal)))
+	(dolist (pair (split-string output "\n" t))
+	  (let ((i (cl-search ": " pair)))
+	    (if i
+		(puthash (substring pair 0 i)
+			 (substring pair (+ i 2))
+			 table))))
+	(zale-add-path (gethash "local-bin-path" table))
+	(dolist (path (split-string (gethash "bin-path" table) ";" t))
+	  (zale-add-path path)))))
+
 (package-initialize)
 
 (use-package leuven-theme
@@ -128,6 +147,14 @@
 
 (use-package haskell-mode
   :ensure t)
+
+(use-package ghc
+  :ensure t
+  :config
+  (zale-setup-stack)
+  (autoload 'ghc-init "ghc" nil t)
+  (autoload 'ghc-debug "ghc" nil t)
+  (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 
 (use-package markdown-mode
   :ensure t)
