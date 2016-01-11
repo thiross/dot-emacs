@@ -1,4 +1,5 @@
 (require 'bind-key)
+(require 'gdb-mi)
 
 ;;; find root
 (defun projects-find-root ()
@@ -33,6 +34,22 @@
 				 build-dir))
       (compile make-command))))
 
-(bind-key "<f5>" 'projects-compile)
+(defun projects-find-gud ()
+  (let ((gud nil))
+    (dolist (buf (buffer-list) gud)
+      (if (null gud)
+	  (if (string-prefix-p "*gud"
+			       (buffer-name buf))
+	      (setq gud buf))))))
+
+(defun projects-reset-gud ()
+  (interactive)
+  (let ((gud (projects-find-gud)))
+    (if (null gud)
+	(call-interactively #'gdb))
+    (gdb-restore-windows)))
+
+(bind-key "<f3>" 'projects-reset-gud)
+(bind-key "<f4>" 'projects-compile)
 
 (provide 'projects)
