@@ -4,7 +4,7 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'gb18030)
   (modify-coding-system-alist 'process "ghci" 'gb18030)
-  (let ((en-font "Source Code Pro-9"))
+  (let ((en-font "Consolas-10"))
     (cond
      ((eq system-type 'darwin)
       (setq en-font "Monaco-11")))
