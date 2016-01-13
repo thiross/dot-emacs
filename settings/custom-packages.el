@@ -2,14 +2,11 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			 ("melpa" . "http://melpa.org/packages/")))
 
-(defvar custom-packages-stack-initialized nil)
-
 (defun custom-packages-setup-stack ()
-  (if (and (not custom-packages-stack-initialized)
-	   (executable-find "stack"))
+  (if (executable-find "stack")
       (let ((output (shell-command-to-string "stack path"))
 	    (table (make-hash-table :test 'equal)))
-	(setq custom-packages-stack-initialized t)
+	(advice-remove 'ghc-init #'custom-packages-setup-stack)
 	(dolist (pair (split-string output "\n" t))
 	  (let ((i (cl-search ": " pair)))
 	    (if i
@@ -93,8 +90,8 @@
   :config
   (autoload 'ghc-init "ghc" nil t)
   (autoload 'ghc-debug "ghc" nil t)
-  (add-hook 'haskell-mode-hook 'ghc-init)
-  (add-hook 'haskell-mode-hook 'custom-packages-setup-stack))
+  (advice-add 'ghc-init :before #'custom-packages-setup-stack)
+  (add-hook 'haskell-mode-hook 'ghc-init))
 
 (use-package markdown-mode
   :ensure t)
