@@ -35,15 +35,15 @@
   (load-theme 'solarized-dark t))
 
 (use-package atom-dark-theme
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package monokai-theme
   :ensure t
   :defer t)
 
 (use-package molokai-theme
-  :ensure t
-  :defer t)
+  :ensure t)
 
 (use-package magit
   :ensure t
