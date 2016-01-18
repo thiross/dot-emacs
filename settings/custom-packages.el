@@ -43,6 +43,10 @@
   :defer t)
 
 (use-package molokai-theme
+  :ensure t
+  :defer t)
+
+(use-package atom-one-dark-theme
   :ensure t)
 
 (use-package magit
