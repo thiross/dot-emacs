@@ -8,8 +8,8 @@
 	   (not (member path exec-path)))
       (add-to-list 'exec-path path)))
 
+(add-sub-under-user-directory "lisp")
 (add-sub-under-user-directory "lisp/use-package")
-(add-sub-under-user-directory "settings")
 
 (require 'settings)
 (settings-set-all)
@@ -20,3 +20,6 @@
 (require 'custom-packages)
 
 (require 'projects)
+(require 'hlsl-mode)
+
+
