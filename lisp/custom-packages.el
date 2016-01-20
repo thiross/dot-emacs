@@ -64,6 +64,7 @@
 	    'helm-execute-persistent-action helm-map)
   (bind-key "C-z"
 	    'helm-select-action)
+  (bind-key "C-x C-f" 'helm-find-files)
   (helm-mode 1))
 
 (if (executable-find "ag")
