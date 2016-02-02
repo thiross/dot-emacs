@@ -2,3 +2,4 @@
 elpa
 server
 *.elc
+/user.el
