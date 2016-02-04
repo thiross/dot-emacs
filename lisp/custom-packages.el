@@ -30,8 +30,9 @@
 
 (use-package solarized-theme
   :ensure t
+  ;; :defer t
   :config
-  (load-theme 'solarized-light t))
+  (load-theme 'solarized-dark t))
 
 (use-package atom-dark-theme
   :ensure t
