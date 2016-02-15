@@ -29,8 +29,10 @@
   :ensure t)
 
 (use-package solarized-theme
+  :init
+  (setq solarized-use-more-italic t)
   :ensure t
-  :defer t
+  ;; :defer t
   :config
   (load-theme 'solarized-dark t))
 
@@ -47,7 +49,7 @@
   :defer t)
 
 (use-package atom-one-dark-theme
-  ;; :defer t
+  :defer t
   :ensure t)
 
 (use-package magit
