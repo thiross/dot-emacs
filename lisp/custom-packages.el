@@ -30,7 +30,7 @@
 
 (use-package solarized-theme
   :ensure t
-  ;; :defer t
+  :defer t
   :config
   (load-theme 'solarized-dark t))
 
@@ -47,7 +47,7 @@
   :defer t)
 
 (use-package atom-one-dark-theme
-  :ensure t
+  ;; :ensure t
   :defer t)
 
 (use-package magit
