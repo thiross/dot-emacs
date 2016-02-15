@@ -25,8 +25,8 @@
 (package-initialize)
 
 (use-package leuven-theme
-  :ensure t
-  :defer t)
+  :defer t
+  :ensure t)
 
 (use-package solarized-theme
   :ensure t
@@ -47,8 +47,8 @@
   :defer t)
 
 (use-package atom-one-dark-theme
-  ;; :ensure t
-  :defer t)
+  ;; :defer t
+  :ensure t)
 
 (use-package magit
   :ensure t
