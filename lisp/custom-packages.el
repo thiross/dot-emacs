@@ -57,6 +57,11 @@
   :config
   (bind-key "<f2>" 'magit-status))
 
+(use-package clang-format
+  :ensure t
+  :config
+  (bind-key "<f5>" 'clang-format-buffer))
+
 (use-package helm
   :ensure t
   :config
