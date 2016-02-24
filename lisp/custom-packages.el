@@ -15,7 +15,9 @@
 			 table))))
 	(add-executable-path (gethash "local-bin-path" table))
 	(dolist (path (split-string (gethash "bin-path" table) ";" t))
-	  (add-executable-path path)))))
+	  (add-executable-path path))
+	(setenv "PATH"
+		(mapconcat 'identity exec-path ";")))))
 
 ;; libraries
 (require 'package)
