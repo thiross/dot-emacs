@@ -4,7 +4,7 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'gb18030)
   (modify-coding-system-alist 'process "ghci" 'gb18030)
-  (let ((en-font "Envy Code R-10"))
+  (let ((en-font "Consolas-10:bold"))
     (cond
      ((eq system-type 'darwin)
       (setq en-font "Monaco-11")))
@@ -57,6 +57,7 @@
 
 ;; bind keys globally
 (defun settings-bind-global-keys ()
+  (bind-key "<f1>" 'ff-find-other-file)
   (bind-key "M-/" 'hippie-expand)
   (bind-key "S-SPC" 'set-mark-command)
   (bind-key "C-o" 'settings-open-line))
