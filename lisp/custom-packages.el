@@ -34,21 +34,21 @@
   :init
   (setq solarized-use-more-italic t)
   :ensure t
-  ;; :defer t
+  :defer t
   :config
   (load-theme 'solarized-dark t))
 
 (use-package atom-dark-theme
-  :ensure t
-  :defer t)
+  :defer t
+  :ensure t)
 
 (use-package monokai-theme
-  :ensure t
-  :defer t)
+  :defer t
+  :ensure t)
 
 (use-package molokai-theme
-  :ensure t
-  :defer t)
+  ;; :defer t
+  :ensure t)
 
 (use-package atom-one-dark-theme
   :defer t
