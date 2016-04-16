@@ -4,7 +4,7 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'gb18030)
   (modify-coding-system-alist 'process "ghci" 'gb18030)
-  (let ((en-font "Fantasque Sans Mono:pixelsize=14"))
+  (let ((en-font "Ubuntu Mono:pixelsize=13"))
     (cond
      ((eq system-type 'darwin)
       (setq en-font "Monaco-11")))
