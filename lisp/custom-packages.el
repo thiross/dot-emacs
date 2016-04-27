@@ -27,7 +27,7 @@
 (package-initialize)
 
 (use-package leuven-theme
-  ;;:defer t
+  :defer t
   :ensure t)
 
 (use-package solarized-theme
@@ -39,11 +39,11 @@
   (load-theme 'solarized-dark t))
 
 (use-package atom-dark-theme
-  :defer t
+  ;; :defer t
   :ensure t)
 
 (use-package monokai-theme
-  :defer t
+  ;; :defer t
   :ensure t)
 
 (use-package molokai-theme
@@ -51,7 +51,7 @@
   :ensure t)
 
 (use-package atom-one-dark-theme
-  :defer t
+  ;; :defer t
   :ensure t)
 
 (use-package magit
