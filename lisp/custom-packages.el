@@ -39,11 +39,11 @@
   (load-theme 'solarized-dark t))
 
 (use-package atom-dark-theme
-  ;; :defer t
+  :defer t
   :ensure t)
 
 (use-package monokai-theme
-  ;; :defer t
+  :defer t
   :ensure t)
 
 (use-package molokai-theme
@@ -51,8 +51,14 @@
   :ensure t)
 
 (use-package atom-one-dark-theme
-  ;; :defer t
+  :defer t
   :ensure t)
+
+(use-package moe-theme
+  ;; :defer t
+  :ensure t
+  :config
+  (load-theme 'moe-dark t))
 
 (use-package magit
   :ensure t
