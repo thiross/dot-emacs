@@ -15,6 +15,7 @@
 		    (:tab-width . 4))
     (cperl-mode-hook (cperl-indent-level . 4))
     (html-mode-hook (:expand-tab t))
+    (lua-mode-hook (:expand-tab t))
     ))
 
 ;;; tab width
