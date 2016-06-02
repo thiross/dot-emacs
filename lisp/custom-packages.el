@@ -71,8 +71,7 @@
 
 (use-package clang-format
   :ensure t
-  :config
-  (bind-key "<f5>" 'clang-format-buffer))
+  :config)
 
 (use-package helm
   :ensure t
