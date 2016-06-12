@@ -36,7 +36,7 @@
   :ensure t
   ;; :defer t
   :config
-  (load-theme 'solarized-dark t))
+  (load-theme 'solarized-light t))
 
 (use-package atom-dark-theme
   :defer t
