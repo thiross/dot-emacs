@@ -34,7 +34,7 @@
   :init
   (setq solarized-use-more-italic t)
   :ensure t
-  ;; :defer t
+  :defer t
   :config
   (load-theme 'solarized-dark t))
 
@@ -47,7 +47,7 @@
   :ensure t)
 
 (use-package zenburn-theme
-  :defer t
+  ;; :defer t
   :ensure t)
 
 (use-package molokai-theme
