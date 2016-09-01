@@ -34,9 +34,9 @@
   :init
   (setq solarized-use-more-italic t)
   :ensure t
-  :defer t
+  ;; :defer t
   :config
-  (load-theme 'solarized-dark t))
+  (load-theme 'solarized-light t))
 
 (use-package atom-dark-theme
   :defer t
@@ -59,7 +59,7 @@
   :ensure t)
 
 (use-package moe-theme
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (load-theme 'moe-dark t))
@@ -101,6 +101,9 @@
   :ensure t)
 
 (use-package glsl-mode
+  :ensure t)
+
+(use-package yaml-mode
   :ensure t)
 
 (use-package haskell-mode
