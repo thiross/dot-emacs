@@ -17,6 +17,7 @@
 
 (add-sub-under-user-directory "lisp")
 (add-sub-under-user-directory "lisp/use-package")
+(add-sub-under-user-directory "lisp/doom-theme")
 
 (let ((user-config-file (expand-file-name "user.el"
 					  user-emacs-directory)))

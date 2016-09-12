@@ -59,10 +59,13 @@
   :ensure t)
 
 (use-package moe-theme
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (load-theme 'moe-dark t))
+
+(require 'doom-theme)
+(load-theme 'doom-one t)
 
 (use-package magit
   :ensure t
@@ -124,3 +127,4 @@
   :ensure t)
 
 (provide 'custom-packages)
+

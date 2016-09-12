@@ -1,3 +1,6 @@
 [submodule "use-package"]
 	path = lisp/use-package
 	url = https://github.com/jwiegley/use-package.git
+[submodule "lisp/doom-theme"]
+	path = lisp/doom-theme
+	url = https://github.com/hlissner/emacs-doom-theme.git
