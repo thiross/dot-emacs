@@ -109,6 +109,11 @@
 (use-package yaml-mode
   :ensure t)
 
+(use-package neotree
+  :ensure t
+  :config
+  (bind-key "<f9>" 'neotree-toggle))
+
 (use-package haskell-mode
   :ensure t
   :config
