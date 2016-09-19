@@ -76,38 +76,22 @@
   :ensure t
   :config)
 
-(if nil
-    (progn
-      (use-package helm
-	:ensure t
-	:config
-	(bind-key "M-x" 'helm-M-x)
-	(bind-key "<tab>"
-		  'helm-execute-persistent-action helm-map)
-	(bind-key "C-i"
-		  'helm-execute-persistent-action helm-map)
-	(bind-key "C-z"
-		  'helm-select-action)
-	(bind-key "C-x C-f" 'helm-find-files)
-	(helm-mode 1))
+(use-package helm
+  :ensure t
+  :config
+  (bind-key "M-x" 'helm-M-x)
+  (bind-key "<tab>"
+	    'helm-execute-persistent-action helm-map)
+  (bind-key "C-i"
+	    'helm-execute-persistent-action helm-map)
+  (bind-key "C-z"
+	    'helm-select-action)
+  (bind-key "C-x C-f" 'helm-find-files)
+  (helm-mode 1))
 
-      (if (executable-find "ag")
-	  (use-package helm-ag
-	    :ensure t)))
-  (use-package ivy
-    :ensure t
-    :config
-    (ivy-mode 1))
-  (use-package swiper
-    :ensure t
-    :config
-    (bind-key "C-s" 'swiper))
-  (use-package counsel
-    :ensure t
-    :config
-    (bind-key "C-x C-f" 'counsel-find-file)
-    (bind-key "M-x" 'counsel-M-x))
-  )
+(if (executable-find "ag")
+    (use-package helm-ag
+      :ensure t))
 
 (use-package auctex
   :ensure t
@@ -148,4 +132,3 @@
   :ensure t)
 
 (provide 'custom-packages)
-
