@@ -98,7 +98,11 @@
   :defer t)
 
 (use-package lua-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'lua-mode-hook
+	    (lambda ()
+	      (electric-indent-mode -1))))
 
 (use-package cmake-mode
   :ensure t)
