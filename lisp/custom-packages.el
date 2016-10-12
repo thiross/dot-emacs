@@ -31,7 +31,7 @@
   :ensure t)
 
 (use-package solarized-theme
-  ;; :defer t
+  :defer t
   :init
   (setq solarized-use-more-italic t)
   :ensure t
@@ -64,8 +64,8 @@
   :config
   (load-theme 'moe-dark t))
 
-;; (require 'doom-theme)
-;; (load-theme 'doom-one t)
+(require 'doom-theme)
+(load-theme 'doom-one t)
 
 (use-package magit
   :ensure t
