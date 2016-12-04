@@ -14,6 +14,17 @@
 	   (not (member path exec-path)))
       (add-to-list 'exec-path path)))
 
+(defun export-exec-path-to-env ()
+  (let ((sp (cond ((eq system-type 'ms-dos) ";")
+		  ((eq system-type 'windows-nt) ";")
+		  (t ":"))))
+    (setenv "PATH"
+	    (mapconcat 'identity exec-path sp))))
+
+(if (eq system-type 'darwin)
+    (progn (add-executable-path "~/.local/bin")
+	   (export-exec-path-to-env)))
+
 (add-sub-under-user-directory "lisp")
 (add-sub-under-user-directory "lisp/use-package")
 (add-sub-under-user-directory "lisp/doom-theme")
