@@ -150,7 +150,8 @@
   :ensure t
   :config
   (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
+  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  (bind-key "<f5>" 'haskell-mode-stylish-buffer haskell-mode-map))
 
 (use-package ghc
   :ensure t
