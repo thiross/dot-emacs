@@ -150,7 +150,10 @@
   :ensure t
   :config
   (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  (add-hook 'haskell-mode-hook
+	    (lambda ()
+	      (setq haskell-compile-cabal-build-command "stack build")))
+  (bind-key "<f4>" 'haskell-compile haskell-mode-map)
   (bind-key "<f5>" 'haskell-mode-stylish-buffer haskell-mode-map))
 
 (use-package ghc
