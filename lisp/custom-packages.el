@@ -36,7 +36,7 @@
   :ensure t)
 
 (use-package solarized-theme
-  ;; :defer t
+  :defer t
   :init
   (setq solarized-use-more-italic t)
   :ensure t
@@ -64,7 +64,7 @@
   :ensure t)
 
 (use-package moe-theme
-  :defer t
+  ;; :defer t
   :ensure t
   :config
   (load-theme 'moe-dark t))
