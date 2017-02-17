@@ -60,11 +60,11 @@
   :ensure t)
 
 (use-package atom-one-dark-theme
-  :defer t
+  ;; :defer t
   :ensure t)
 
 (use-package moe-theme
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (load-theme 'moe-dark t))
