@@ -23,6 +23,7 @@
 
 (if (eq system-type 'darwin)
     (progn (add-executable-path "~/.local/bin")
+	   (add-executable-path "/usr/local/bin")
 	   (export-exec-path-to-env)))
 
 (add-sub-under-user-directory "lisp")
