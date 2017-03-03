@@ -112,7 +112,9 @@
   (use-package swiper
     :ensure t
     :config
-    (bind-key "C-s" 'swiper)))
+    (bind-key "C-s" 'swiper)
+    (setq counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s")
+    (bind-key "<f10>" 'counsel-ag)))
 
 (if nil
     (use-helm)
