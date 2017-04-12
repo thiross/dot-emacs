@@ -2,28 +2,6 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			 ("melpa" . "http://melpa.org/packages/")))
 
-;; (defun custom-packages-setup-stack ()
-;;   (let ((sp (cond ((eq system-type 'windows-nt) ";")
-;; 		  ((eq system-type 'ms-dos) ";")
-;; 		  (t ":"))))
-;;     (if (executable-find "stack")
-;; 	(let ((output (shell-command-to-string "stack path"))
-;; 	      (table (make-hash-table :test 'equal)))
-;; 	  (advice-remove 'ghc-init #'custom-packages-setup-stack)
-;; 	  (dolist (pair (split-string output "\n" t))
-;; 	    (let ((i (cl-search ": " pair)))
-;; 	      (if i
-;; 		  (puthash (substring pair 0 i)
-;; 			   (substring pair (+ i 2))
-;; 			   table))))
-;; 	  (add-executable-path (gethash "local-bin-path" table))
-;; 	  (dolist (path (split-string (gethash "bin-path" table)
-;; 				      sp
-;; 				      t))
-;; 	    (add-executable-path path))
-;; 	  (setenv "PATH"
-;; 		  (mapconcat 'identity exec-path sp))))))
-
 ;; libraries
 (require 'package)
 (require 'bind-key)
@@ -158,15 +136,10 @@
   (bind-key "<f4>" 'haskell-compile haskell-mode-map)
   (bind-key "<f5>" 'haskell-mode-stylish-buffer haskell-mode-map))
 
-;; (use-package ghc
-;;   :ensure t
-;;   :config
-;;   (autoload 'ghc-init "ghc" nil t)
-;;   (autoload 'ghc-debug "ghc" nil t)
-;;   (advice-add 'ghc-init :before #'custom-packages-setup-stack)
-;;   (add-hook 'haskell-mode-hook 'ghc-init))
-
-(use-package intero)
+(use-package intero
+  :ensure t
+  :config
+  (add-hook 'haskell-mode-hook 'intero-mode))
 
 (use-package markdown-mode
   :ensure t)

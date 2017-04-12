@@ -45,3 +45,17 @@
 
 (require 'projects)
 (require 'hlsl-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (markdown-mode haskell-mode neotree yaml-mode glsl-mode json-mode cmake-mode lua-mode auctex counsel ivy clang-format magit moe-theme atom-one-dark-theme molokai-theme zenburn-theme monokai-theme atom-dark-theme solarized-theme leuven-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
