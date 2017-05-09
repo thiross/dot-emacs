@@ -139,6 +139,8 @@
 (use-package intero
   :ensure t
   :config
+  (require 'flycheck)
+  (flycheck-add-next-checker 'intero '(warning . haskell-hlint))
   (add-hook 'haskell-mode-hook 'intero-mode))
 
 (use-package markdown-mode
