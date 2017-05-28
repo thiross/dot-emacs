@@ -38,7 +38,7 @@
   :ensure t)
 
 (use-package atom-one-dark-theme
-  ;; :defer t
+  :defer t
   :ensure t)
 
 (use-package moe-theme
@@ -47,8 +47,8 @@
   :config
   (load-theme 'moe-dark t))
 
-;; (require 'doom-theme)
-;; (load-theme 'doom-one t)
+(require 'doom-theme)
+(load-theme 'doom-one t)
 
 (use-package magit
   :ensure t
@@ -141,6 +141,8 @@
 (use-package intero
   :ensure t
   :config
+  (require 'flycheck)
+  (flycheck-add-next-checker 'intero '(warning . haskell-hlint))
   (add-hook 'haskell-mode-hook 'intero-mode))
 
 (use-package markdown-mode
