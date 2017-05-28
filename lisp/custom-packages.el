@@ -133,6 +133,8 @@
   (add-hook 'haskell-mode-hook
 	    (lambda ()
 	      (setq haskell-compile-cabal-build-command "stack build")))
+  (bind-key "<f1>" 'haskell-cabal-visit-file)
+  (bind-key "<f4>" 'haskell-compile haskell-cabal-mode-map)
   (bind-key "<f4>" 'haskell-compile haskell-mode-map)
   (bind-key "<f5>" 'haskell-mode-stylish-buffer haskell-mode-map))
 
