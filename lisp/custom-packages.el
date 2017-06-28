@@ -51,7 +51,7 @@
   ;; :defer t
   :ensure t
   :config
-  (load-theme 'material-dark t))
+  (load-theme 'material t))
 
 (require 'doom-theme)
 ;; (load-theme 'doom-one t)
