@@ -47,8 +47,19 @@
   :config
   (load-theme 'moe-dark t))
 
+(use-package material-theme
+  ;; :defer t
+  :ensure t
+  :config
+  (load-theme 'material-dark t))
+
 (require 'doom-theme)
-(load-theme 'doom-one t)
+;; (load-theme 'doom-one t)
+
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-default-theme))
 
 (use-package magit
   :ensure t
@@ -133,7 +144,7 @@
   (add-hook 'haskell-mode-hook
 	    (lambda ()
 	      (setq haskell-compile-cabal-build-command "stack build")))
-  (bind-key "<f1>" 'haskell-cabal-visit-file)
+  (bind-key "<f1>" 'haskell-cabal-visit-file haskell-mode-map)
   (bind-key "<f4>" 'haskell-compile haskell-cabal-mode-map)
   (bind-key "<f4>" 'haskell-compile haskell-mode-map)
   (bind-key "<f5>" 'haskell-mode-stylish-buffer haskell-mode-map))
