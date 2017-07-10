@@ -70,44 +70,23 @@
   :ensure t
   :config)
 
-(defun use-helm ()
-  (use-package helm
-    :ensure t
-    :config
-    (bind-key "M-x" 'helm-M-x)
-    (bind-key "<tab>"
-	      'helm-execute-persistent-action helm-map)
-    (bind-key "C-i"
-	      'helm-execute-persistent-action helm-map)
-    (bind-key "C-z"
-	      'helm-select-action)
-    (bind-key "C-x C-f" 'helm-find-files)
-    (helm-mode 1))
-  
-  (if (executable-find "ag")
-      (use-package helm-ag
-	:ensure t)))
+(use-package ivy
+  :ensure t
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t))
 
-(defun use-ivy ()
-  (use-package ivy
-    :ensure t
-    :config
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t))
-  (use-package counsel
-    :ensure t
-    :config
-    (bind-key "C-x C-f" 'counsel-find-file))
-  (use-package swiper
-    :ensure t
-    :config
-    (bind-key "C-s" 'swiper)
-    (setq counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s")
-    (bind-key "<f10>" 'counsel-ag)))
+(use-package counsel
+  :ensure t
+  :config
+  (bind-key "C-x C-f" 'counsel-find-file))
 
-(if nil
-    (use-helm)
-  (use-ivy))
+(use-package swiper
+  :ensure t
+  :config
+  (bind-key "C-s" 'swiper)
+  (setq counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s")
+  (bind-key "<f10>" 'counsel-ag))
 
 (use-package auctex
   :ensure t
@@ -144,17 +123,19 @@
   (add-hook 'haskell-mode-hook
 	    (lambda ()
 	      (setq haskell-compile-cabal-build-command "stack build")))
-  (bind-key "<f1>" 'haskell-cabal-visit-file haskell-mode-map)
+  (bind-key "C-c C-f" 'haskell-cabal-visit-file haskell-mode-map)
   (bind-key "<f4>" 'haskell-compile haskell-cabal-mode-map)
+  (bind-key "C-c C-c" 'haskell-compile haskell-cabal-mode-map)
   (bind-key "<f4>" 'haskell-compile haskell-mode-map)
-  (bind-key "<f5>" 'haskell-mode-stylish-buffer haskell-mode-map))
+  (bind-key "C-c C-q" 'haskell-mode-stylish-buffer haskell-mode-map))
 
 (use-package intero
   :ensure t
   :config
   (require 'flycheck)
   (flycheck-add-next-checker 'intero '(warning . haskell-hlint))
-  (add-hook 'haskell-mode-hook 'intero-mode))
+  (add-hook 'haskell-mode-hook 'intero-mode)
+  (bind-key "C-c C-c" 'haskell-compile intero-mode-map))
 
 (use-package markdown-mode
   :ensure t)
