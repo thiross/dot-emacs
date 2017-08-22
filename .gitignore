@@ -4,3 +4,4 @@ server
 *.elc
 /user.el
 /recentf
+*.data
