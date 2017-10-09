@@ -48,13 +48,13 @@
   (load-theme 'moe-dark t))
 
 (use-package material-theme
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (load-theme 'material t))
 
 (require 'doom-theme)
-;; (load-theme 'doom-one t)
+(load-theme 'doom-one t)
 
 (use-package powerline
   :ensure t
