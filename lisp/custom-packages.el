@@ -53,8 +53,20 @@
   :config
   (load-theme 'material t))
 
-(require 'doom-theme)
-(load-theme 'doom-one t)
+(use-package all-the-icons
+  :ensure t)
+
+(use-package doom-themes
+  ;; :defer t
+  :ensure t
+  :config
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
+  (load-theme 'doom-one t)
+  (doom-themes-neotree-config))
+
+;; (require 'doom-theme)
+;; (load-theme 'doom-one t)
 
 (use-package powerline
   :ensure t
