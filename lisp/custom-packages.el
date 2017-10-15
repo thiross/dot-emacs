@@ -114,6 +114,9 @@
 (use-package cmake-mode
   :ensure t)
 
+(use-package groovy-mode
+  :ensure t)
+
 (use-package json-mode
   :ensure t)
 
