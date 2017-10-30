@@ -54,7 +54,7 @@
   (load-theme 'material t))
 
 (use-package all-the-icons
-  :ensure t)
+  :ensure nil)
 
 (use-package doom-themes
   ;; :defer t
