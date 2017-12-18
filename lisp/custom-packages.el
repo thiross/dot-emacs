@@ -53,8 +53,13 @@
   :config
   (load-theme 'material t))
 
-(use-package all-the-icons
-  :ensure nil)
+(use-package nord-theme
+  :defer t
+  :ensure t
+  :config
+  (load-theme 'nord t))
+
+(use-package all-the-icons)
 
 (use-package doom-themes
   ;; :defer t
