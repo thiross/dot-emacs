@@ -14,7 +14,7 @@
   :ensure t)
 
 (use-package solarized-theme
-  ;; :defer t
+  :defer t
   :init
   (setq solarized-use-more-italic t)
   :ensure t
@@ -54,7 +54,7 @@
   (load-theme 'material t))
 
 (use-package nord-theme
-  :defer t
+  ;; :defer t
   :ensure t
   :config
   (load-theme 'nord t))
