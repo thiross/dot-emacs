@@ -14,7 +14,7 @@
   :ensure t)
 
 (use-package solarized-theme
-  :defer t
+  ;; :defer t
   :init
   (setq solarized-use-more-italic t)
   :ensure t
@@ -62,7 +62,7 @@
 (use-package all-the-icons)
 
 (use-package doom-themes
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (setq doom-themes-enable-bold t
