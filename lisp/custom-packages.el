@@ -54,7 +54,7 @@
   (load-theme 'material t))
 
 (use-package nord-theme
-  :defer t
+  ;; :defer t
   :ensure t
   :config
   (load-theme 'nord t))
@@ -62,7 +62,7 @@
 (use-package all-the-icons)
 
 (use-package doom-themes
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (setq doom-themes-enable-bold t
