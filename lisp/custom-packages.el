@@ -42,7 +42,7 @@
   :ensure t)
 
 (use-package moe-theme
-  :defer t
+  ;; :defer t
   :ensure t
   :config
   (load-theme 'moe-dark t))
@@ -54,7 +54,7 @@
   (load-theme 'material t))
 
 (use-package nord-theme
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (load-theme 'nord t))
