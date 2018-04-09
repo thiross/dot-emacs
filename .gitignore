@@ -5,3 +5,4 @@ server
 /user.el
 /recentf
 *.data
+.DS_Store
