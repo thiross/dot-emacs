@@ -19,7 +19,7 @@
   (setq solarized-use-more-italic t)
   :ensure t
   :config
-  (load-theme 'solarized-dark t))
+  (load-theme 'solarized-light t))
 
 (use-package atom-dark-theme
   :defer t
