@@ -14,12 +14,12 @@
   :ensure t)
 
 (use-package solarized-theme
-  ;; :defer t
+  :defer t
   :init
   (setq solarized-use-more-italic t)
   :ensure t
   :config
-  (load-theme 'solarized-light t))
+  (load-theme 'solarized-dark t))
 
 (use-package atom-dark-theme
   :defer t
@@ -48,7 +48,7 @@
   (load-theme 'moe-dark t))
 
 (use-package material-theme
-  :defer t
+  ;; :defer t
   :ensure t
   :config
   (load-theme 'material t))
