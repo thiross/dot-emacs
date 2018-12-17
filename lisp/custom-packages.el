@@ -48,7 +48,7 @@
   (load-theme 'moe-dark t))
 
 (use-package material-theme
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (load-theme 'material t))
@@ -62,16 +62,13 @@
 (use-package all-the-icons)
 
 (use-package doom-themes
-  :defer t
+  ;; :defer t
   :ensure t
   :config
   (setq doom-themes-enable-bold t
 	doom-themes-enable-italic t)
   (load-theme 'doom-one t)
   (doom-themes-neotree-config))
-
-;; (require 'doom-theme)
-;; (load-theme 'doom-one t)
 
 (use-package powerline
   :ensure t
