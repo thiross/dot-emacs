@@ -2,8 +2,8 @@
 ;;; language&font config
 (defun settings-lang&font ()
   (prefer-coding-system 'utf-8)
-  (setq file-name-coding-system 'gb18030)
-  (modify-coding-system-alist 'process "ghci" 'gb18030)
+  (setq file-name-coding-system 'utf-8)
+  (modify-coding-system-alist 'process "ghci" 'utf-8)
   (let ((en-font "Consolas-10"))
     (cond
      ((eq system-type 'darwin)
@@ -32,6 +32,16 @@
   (setq inhibit-startup-message t)
   ;; recursive minibuffers
   (setq enable-recursive-minibuffers t)
+  ;; set frame size.
+  (if (display-graphic-p)
+      (progn
+	(setq initial-frame-alist
+	      '((width . 80)
+		(height . 30)))
+	(setq default-frame-alist
+	      '((width . 80)
+		(height . 30)))
+	))
   ;; frame title format
   (setq frame-title-format
         '(buffer-file-name "%f"
