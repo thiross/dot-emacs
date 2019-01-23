@@ -154,7 +154,12 @@
   (bind-key "<f4>" 'haskell-compile haskell-cabal-mode-map)
   (bind-key "C-c C-c" 'haskell-compile haskell-cabal-mode-map)
   (bind-key "<f4>" 'haskell-compile haskell-mode-map)
-  (bind-key "C-c C-q" 'haskell-mode-stylish-buffer haskell-mode-map))
+  (bind-key "C-c C-q" (lambda ()
+			(interactive)
+			(haskell-mode-stylish-buffer)
+			(haskell-mode-buffer-apply-command "brittany"))
+	    haskell-mode-map))
+
 
 (use-package intero
   :ensure t
