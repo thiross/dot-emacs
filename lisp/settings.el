@@ -7,7 +7,7 @@
   (let ((en-font "Consolas-10"))
     (cond
      ((eq system-type 'darwin)
-      (setq en-font "Input-11")))
+      (setq en-font "Monaco-13")))
     (set-frame-font en-font))
   (let ((spec (font-spec :family "Microsoft Yahei" :size 12)))
     (set-fontset-font t 'han spec)
