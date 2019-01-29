@@ -14,7 +14,7 @@
   :ensure t)
 
 (use-package solarized-theme
-  ;; :defer t
+  :defer t
   :init
   (setq solarized-use-more-italic nil)
   (setq solarized-high-contrast-mode-line t)
@@ -72,7 +72,7 @@
   (doom-themes-neotree-config))
 
 (use-package night-owl-theme
-  :defer t
+  ;; :defer t
   :ensure t
   :config
   (load-theme 'night-owl t))
@@ -154,6 +154,9 @@
   (bind-key "<f4>" 'haskell-compile haskell-cabal-mode-map)
   (bind-key "C-c C-c" 'haskell-compile haskell-cabal-mode-map)
   (bind-key "<f4>" 'haskell-compile haskell-mode-map)
+  (defun brittany()
+    (interactive)
+    (haskell-mode-buffer-apply-command "brittany"))
   (bind-key "C-c C-q" (lambda ()
 			(interactive)
 			(haskell-mode-stylish-buffer)
