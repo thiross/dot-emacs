@@ -95,6 +95,7 @@
   :ensure t
   :config
   (ivy-mode 1)
+  (setq ivy-display-style 'fancy)
   (setq ivy-use-virtual-buffers t))
 
 (use-package counsel
