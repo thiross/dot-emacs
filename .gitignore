@@ -6,3 +6,5 @@ server
 /recentf
 *.data
 .DS_Store
+/eshell/
+/transient/
