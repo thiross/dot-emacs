@@ -14,7 +14,7 @@
   :ensure t)
 
 (use-package solarized-theme
-  :defer t
+  ;; :defer t
   :init
   (setq solarized-use-more-italic nil)
   (setq solarized-high-contrast-mode-line t)
@@ -72,7 +72,7 @@
   (doom-themes-neotree-config))
 
 (use-package night-owl-theme
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (load-theme 'night-owl t))
