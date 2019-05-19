@@ -14,7 +14,7 @@
   :ensure t)
 
 (use-package solarized-theme
-  ;; :defer t
+  :defer t
   :init
   (setq solarized-use-more-italic nil)
   (setq solarized-high-contrast-mode-line t)
@@ -49,7 +49,7 @@
   (load-theme 'moe-dark t))
 
 (use-package material-theme
-  :defer t
+  ;; :defer t
   :ensure t
   :config
   (load-theme 'material t))
