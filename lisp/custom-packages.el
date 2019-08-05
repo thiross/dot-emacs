@@ -60,7 +60,8 @@
   :config
   (load-theme 'nord t))
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :ensure t)
 
 (use-package doom-themes
   :defer t
@@ -117,8 +118,7 @@
 (use-package lua-mode
   :ensure t
   :config
-  (add-hook 'lua-mode-hook
-	    (lambda ()
+  :hook (lua-mode . (lambda ()
 	      (electric-indent-mode -1))))
 
 (use-package cmake-mode
@@ -146,11 +146,11 @@
 
 (use-package haskell-mode
   :ensure t
+  :hook (haskell-mode
+  	 . (lambda ()
+	     (haskell-indentation-mode)
+	     (setq haskell-compile-cabal-build-command "stack build")))
   :config
-  (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-  (add-hook 'haskell-mode-hook
-	    (lambda ()
-	      (setq haskell-compile-cabal-build-command "stack build")))
   (bind-key "C-c C-f" 'haskell-cabal-visit-file haskell-mode-map)
   (bind-key "<f4>" 'haskell-compile haskell-cabal-mode-map)
   (bind-key "C-c C-c" 'haskell-compile haskell-cabal-mode-map)
