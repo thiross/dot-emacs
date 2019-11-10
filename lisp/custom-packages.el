@@ -49,7 +49,7 @@
   (load-theme 'moe-dark t))
 
 (use-package material-theme
-  ;; :defer t
+  :defer t
   :ensure t
   :config
   (load-theme 'material t))
@@ -73,7 +73,7 @@
   (doom-themes-neotree-config))
 
 (use-package night-owl-theme
-  :defer t
+  ;; :defer t
   :ensure t
   :config
   (load-theme 'night-owl t))
@@ -164,7 +164,6 @@
 			(haskell-mode-buffer-apply-command "brittany"))
 	    haskell-mode-map))
 
-
 (use-package intero
   :ensure t
   :config
@@ -172,6 +171,21 @@
   (flycheck-add-next-checker 'intero '(warning . haskell-hlint))
   (add-hook 'haskell-mode-hook 'intero-mode)
   (bind-key "C-c C-c" 'haskell-compile intero-mode-map))
+
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :config (require 'lsp-clients))
+
+(use-package lsp-ui
+  :ensure t)
+
+(use-package company-lsp
+  :ensure t)
+
+(use-package rust-mode
+  :ensure t)
+
 
 (use-package markdown-mode
   :ensure t)

@@ -7,8 +7,9 @@
   (let ((en-font "Consolas-10"))
     (cond
      ((eq system-type 'darwin)
-      (setq en-font "Iosevka Custom 14")))
+      (setq en-font "Iosevka Custom-14")))
     (set-frame-font en-font))
+  (setq-default line-spacing 0.2)
   (let ((spec (font-spec :family "Microsoft Yahei" :size 12)))
     (set-fontset-font t 'han spec)
     (set-fontset-font t 'symbol spec)
