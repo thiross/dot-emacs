@@ -60,9 +60,6 @@
   :config
   (load-theme 'nord t))
 
-(use-package all-the-icons
-  :ensure t)
-
 (use-package doom-themes
   :defer t
   :ensure t
