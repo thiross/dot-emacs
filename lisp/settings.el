@@ -1,3 +1,4 @@
+;; -*- coding: utf-8 -*-
 (require 'bind-key)
 ;;; language&font config
 (defun settings-lang&font ()
@@ -7,13 +8,14 @@
   (let ((en-font "Consolas-10"))
     (cond
      ((eq system-type 'darwin)
-      (setq en-font "Fira Code-14")))
+      (setq en-font "PT Mono-15")))
     (set-frame-font en-font))
-  (let ((spec (font-spec :family "Microsoft Yahei" :size 12)))
+  (let ((spec (font-spec :family "手札体-简" :size 18)))
     (set-fontset-font t 'han spec)
     (set-fontset-font t 'symbol spec)
     (set-fontset-font t 'cjk-misc spec)
-    (set-fontset-font t 'bopomofo spec)))
+    (set-fontset-font t 'bopomofo spec))
+  (setq-default line-spacing 0.4))
 
 (defun settings-gui ()
   ;; disable menu bar

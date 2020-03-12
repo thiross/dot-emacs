@@ -9,59 +9,52 @@
 
 (package-initialize)
 
-(use-package leuven-theme
-  :defer t
-  :ensure t)
+;; (use-package solarized-theme
+;;   :init
+;;   (setq solarized-use-more-italic nil)
+;;   (setq solarized-high-contrast-mode-line t)
+;;   (setq solarized-use-variable-pitch nil)
+;;   (setq solarized-scale-org-headlines nil)
+;;   (setq solarized-height-minus-1 1)
+;;   (setq solarized-height-plus-1 1)
+;;   (setq solarized-height-plus-2 1)
+;;   (setq solarized-height-plus-3 1)
+;;   (setq solarized-height-plus-4 1)
+;;   :ensure t
+;;   :config
+;;   (load-theme 'solarized-light t))
 
-(use-package solarized-theme
-  :defer t
-  :init
-  (setq solarized-use-more-italic nil)
-  (setq solarized-high-contrast-mode-line t)
-  :ensure t
-  :config
-  (load-theme 'solarized-dark t))
+;; (use-package atom-dark-theme
+;;   :ensure t)
 
-(use-package atom-dark-theme
-  :defer t
-  :ensure t)
+;; (use-package monokai-theme
+;;   :ensure t)
 
-(use-package monokai-theme
-  :defer t
-  :ensure t)
+;; (use-package zenburn-theme
+;;   :ensure t)
 
-(use-package zenburn-theme
-  :defer t
-  :ensure t)
+;; (use-package molokai-theme
+;;   :ensure t)
 
-(use-package molokai-theme
-  :defer t
-  :ensure t)
+;; (use-package atom-one-dark-theme
+;;   :ensure t)
 
-(use-package atom-one-dark-theme
-  :defer t
-  :ensure t)
+;; (use-package moe-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'moe-dark t))
 
-(use-package moe-theme
-  :defer t
-  :ensure t
-  :config
-  (load-theme 'moe-dark t))
+;; (use-package material-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'material t))
 
-(use-package material-theme
-  :defer t
-  :ensure t
-  :config
-  (load-theme 'material t))
-
-(use-package nord-theme
-  :defer t
-  :ensure t
-  :config
-  (load-theme 'nord t))
+;; (use-package nord-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'nord t))
 
 (use-package doom-themes
-  :defer t
   :ensure t
   :config
   (setq doom-themes-enable-bold t
@@ -69,11 +62,10 @@
   (load-theme 'doom-one t)
   (doom-themes-neotree-config))
 
-(use-package night-owl-theme
-  ;; :defer t
-  :ensure t
-  :config
-  (load-theme 'night-owl t))
+;; (use-package night-owl-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'night-owl t))
 
 (use-package powerline
   :ensure t
@@ -84,10 +76,6 @@
   :ensure t
   :config
   (bind-key "<f2>" 'magit-status))
-
-(use-package clang-format
-  :ensure t
-  :config)
 
 (use-package ivy
   :ensure t
@@ -107,10 +95,6 @@
   (bind-key "C-s" 'swiper)
   (setq counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s")
   (bind-key "<f10>" 'counsel-ag))
-
-(use-package auctex
-  :ensure t
-  :defer t)
 
 (use-package lua-mode
   :ensure t
@@ -163,10 +147,11 @@
 
 (use-package intero
   :ensure t
+  :hook ((haskell-mode . intero-mode))
   :config
   (require 'flycheck)
   (flycheck-add-next-checker 'intero '(warning . haskell-hlint))
-  (add-hook 'haskell-mode-hook 'intero-mode)
+  ;; (add-hook 'haskell-mode-hook 'intero-mode)
   (bind-key "C-c C-c" 'haskell-compile intero-mode-map))
 
 (use-package lsp-mode
@@ -183,8 +168,18 @@
 (use-package rust-mode
   :ensure t)
 
+(use-package typescript-mode
+  :ensure t)
 
 (use-package markdown-mode
   :ensure t)
+
+(use-package auctex
+  :defer t
+  :ensure t)
+
+(use-package org-bullets
+  :ensure t
+  :hook (org-mode . org-bullets-mode))
 
 (provide 'custom-packages)

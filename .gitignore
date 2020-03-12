@@ -8,3 +8,4 @@ server
 .DS_Store
 /eshell/
 /transient/
+/.lsp-session*
