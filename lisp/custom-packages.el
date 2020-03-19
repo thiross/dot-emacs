@@ -139,7 +139,7 @@
   (defun brittany()
     (interactive)
     (haskell-mode-buffer-apply-command "brittany"))
-  (bind-key "C-c C-q" (lambda ()
+  (bind-key "M-q" (lambda ()
 			(interactive)
 			(haskell-mode-stylish-buffer)
 			(haskell-mode-buffer-apply-command "brittany"))
@@ -151,7 +151,6 @@
   :config
   (require 'flycheck)
   (flycheck-add-next-checker 'intero '(warning . haskell-hlint))
-  ;; (add-hook 'haskell-mode-hook 'intero-mode)
   (bind-key "C-c C-c" 'haskell-compile intero-mode-map))
 
 (use-package lsp-mode
@@ -166,6 +165,14 @@
   :ensure t)
 
 (use-package rust-mode
+  :ensure t
+  :hook (rust-mode . lsp))
+
+(use-package cargo
+  :ensure t
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package toml-mode
   :ensure t)
 
 (use-package typescript-mode
