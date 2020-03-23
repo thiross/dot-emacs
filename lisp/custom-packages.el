@@ -9,20 +9,20 @@
 
 (package-initialize)
 
-;; (use-package solarized-theme
-;;   :init
-;;   (setq solarized-use-more-italic nil)
-;;   (setq solarized-high-contrast-mode-line t)
-;;   (setq solarized-use-variable-pitch nil)
-;;   (setq solarized-scale-org-headlines nil)
-;;   (setq solarized-height-minus-1 1)
-;;   (setq solarized-height-plus-1 1)
-;;   (setq solarized-height-plus-2 1)
-;;   (setq solarized-height-plus-3 1)
-;;   (setq solarized-height-plus-4 1)
-;;   :ensure t
-;;   :config
-;;   (load-theme 'solarized-light t))
+(use-package solarized-theme
+  :init
+  (setq solarized-use-more-italic nil)
+  (setq solarized-high-contrast-mode-line t)
+  (setq solarized-use-variable-pitch nil)
+  (setq solarized-scale-org-headlines nil)
+  (setq solarized-height-minus-1 1)
+  (setq solarized-height-plus-1 1)
+  (setq solarized-height-plus-2 1)
+  (setq solarized-height-plus-3 1)
+  (setq solarized-height-plus-4 1)
+  :ensure t
+  :config
+  (load-theme 'solarized-dark t))
 
 ;; (use-package atom-dark-theme
 ;;   :ensure t)
@@ -54,13 +54,13 @@
 ;;   :config
 ;;   (load-theme 'nord t))
 
-(use-package doom-themes
-  :ensure t
-  :config
-  (setq doom-themes-enable-bold t
-	doom-themes-enable-italic t)
-  (load-theme 'doom-one t)
-  (doom-themes-neotree-config))
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   (setq doom-themes-enable-bold t
+;; 	doom-themes-enable-italic t)
+;;   (load-theme 'doom-one t)
+;;   (doom-themes-neotree-config))
 
 ;; (use-package night-owl-theme
 ;;   :ensure t
@@ -161,8 +161,12 @@
 (use-package lsp-ui
   :ensure t)
 
-(use-package company-lsp
-  :ensure t)
+(use-package lsp-ivy
+  :ensure t
+  :commands lsp-ivy-workspace-symbol)
+
+;; (use-package company-lsp
+;;   :ensure t)
 
 (use-package rust-mode
   :ensure t
