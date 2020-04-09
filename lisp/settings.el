@@ -8,14 +8,14 @@
   (let ((en-font "Consolas-10"))
     (cond
      ((eq system-type 'darwin)
-      (setq en-font "PT Mono-15")))
+      (setq en-font "Fira Code-14")))
     (set-frame-font en-font))
   (let ((spec (font-spec :family "手札体-简" :size 18)))
     (set-fontset-font t 'han spec)
     (set-fontset-font t 'symbol spec)
     (set-fontset-font t 'cjk-misc spec)
     (set-fontset-font t 'bopomofo spec))
-  (setq-default line-spacing 0.4))
+  (setq-default line-spacing 0.2))
 
 (defun settings-gui ()
   ;; disable menu bar
