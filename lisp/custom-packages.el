@@ -11,7 +11,8 @@
 
 (use-package solarized-theme
   :init
-  (setq solarized-use-more-italic nil)
+  (setq solarized-use-less-bold t)
+  (setq solarized-use-more-italic t)
   (setq solarized-high-contrast-mode-line t)
   (setq solarized-use-variable-pitch nil)
   (setq solarized-scale-org-headlines nil)
@@ -156,7 +157,9 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
-  :config (require 'lsp-clients))
+  :config
+  (require 'lsp-clients)
+  (setq lsp-enable-snippet nil))
 
 (use-package lsp-ui
   :ensure t)
