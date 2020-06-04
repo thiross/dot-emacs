@@ -8,7 +8,7 @@
   (let ((en-font "Consolas-10"))
     (cond
      ((eq system-type 'darwin)
-      (setq en-font "Overpass Mono-12")))
+      (setq en-font "Iosevka Curly Slab-12")))
     (set-frame-font en-font))
   (let ((spec (font-spec :family "手札体-简" :size 14)))
     (set-fontset-font t 'han spec)
