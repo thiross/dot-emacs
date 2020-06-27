@@ -8,9 +8,9 @@
   (let ((en-font "Consolas-10"))
     (cond
      ((eq system-type 'darwin)
-      (setq en-font "Iosevka Curly Slab-12")))
+      (setq en-font "IBM Plex Mono-15")))
     (set-frame-font en-font))
-  (let ((spec (font-spec :family "手札体-简" :size 14)))
+  (let ((spec (font-spec :family "手札体-简" :size 18)))
     (set-fontset-font t 'han spec)
     (set-fontset-font t 'symbol spec)
     (set-fontset-font t 'cjk-misc spec)

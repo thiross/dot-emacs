@@ -60,8 +60,7 @@
 ;;   :config
 ;;   (setq doom-themes-enable-bold t
 ;; 	doom-themes-enable-italic t)
-;;   (load-theme 'doom-one t)
-;;   (doom-themes-neotree-config))
+;;   (load-theme 'doom-one t))
 
 ;; (use-package night-owl-theme
 ;;   :ensure t
@@ -120,11 +119,6 @@
 
 (use-package yaml-mode
   :ensure t)
-
-(use-package neotree
-  :ensure t
-  :config
-  (bind-key "<f9>" 'neotree-toggle))
 
 (use-package haskell-mode
   :ensure t
