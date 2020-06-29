@@ -20,10 +20,10 @@
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family "手札体-简"
-		      :size 15))
+		      :size 18))
 	  (t
 	   (font-spec :family "微软雅黑"
-		      :size 12))
+		      :size 14))
 	  )
 	 ))
     (set-fontset-font t 'han zh-font)
