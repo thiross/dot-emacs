@@ -5,16 +5,31 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'utf-8)
   (modify-coding-system-alist 'process "ghci" 'utf-8)
-  (let ((en-font "Consolas-10"))
-    (cond
-     ((eq system-type 'darwin)
-      (setq en-font "IBM Plex Mono-15")))
+  (let ((en-font
+	 (cond
+	  ((eq system-type 'darwin)
+	   (font-spec :family "Cascadia Code"
+		      :size 15))
+	  (t
+	   (font-spec :family "Cascadia Code"
+		      :size 12))
+	  )
+	 ))
     (set-frame-font en-font))
-  (let ((spec (font-spec :family "手札体-简" :size 18)))
-    (set-fontset-font t 'han spec)
-    (set-fontset-font t 'symbol spec)
-    (set-fontset-font t 'cjk-misc spec)
-    (set-fontset-font t 'bopomofo spec))
+  (let ((zh-font
+	 (cond
+	  ((eq system-type 'darwin)
+	   (font-spec :family "手札体-简"
+		      :size 15))
+	  (t
+	   (font-spec :family "微软雅黑"
+		      :size 12))
+	  )
+	 ))
+    (set-fontset-font t 'han zh-font)
+    (set-fontset-font t 'symbol zh-font)
+    (set-fontset-font t 'cjk-misc zh-font)
+    (set-fontset-font t 'bopomofo zh-font))
   (setq-default line-spacing 0.2))
 
 (defun settings-gui ()

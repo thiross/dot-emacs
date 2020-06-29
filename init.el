@@ -38,7 +38,4 @@
 (require 'settings)
 (settings-set-all)
 
-(require 'mode-hooks)
-(mode-hooks-install-hooks)
-
 (require 'custom-packages)
