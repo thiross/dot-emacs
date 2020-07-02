@@ -8,11 +8,11 @@
   (let ((en-font
 	 (cond
 	  ((eq system-type 'darwin)
-	   (font-spec :family "Cascadia Code"
-		      :size 15))
+	   (font-spec :family "Iosevka SS07"
+		      :size 16))
 	  (t
-	   (font-spec :family "Cascadia Code"
-		      :size 12))
+	   (font-spec :family "Iosevka SS07"
+		      :size 13))
 	  )
 	 ))
     (set-frame-font en-font))
@@ -20,7 +20,7 @@
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family "手札体-简"
-		      :size 18))
+		      :size 16))
 	  (t
 	   (font-spec :family "微软雅黑"
 		      :size 14))

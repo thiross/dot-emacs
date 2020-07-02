@@ -9,21 +9,21 @@
 
 (package-initialize)
 
-(use-package solarized-theme
-  :init
-  (setq solarized-use-less-bold t)
-  (setq solarized-use-more-italic t)
-  (setq solarized-high-contrast-mode-line t)
-  (setq solarized-use-variable-pitch nil)
-  (setq solarized-scale-org-headlines nil)
-  (setq solarized-height-minus-1 1)
-  (setq solarized-height-plus-1 1)
-  (setq solarized-height-plus-2 1)
-  (setq solarized-height-plus-3 1)
-  (setq solarized-height-plus-4 1)
-  :ensure t
-  :config
-  (load-theme 'solarized-dark t))
+;; (use-package solarized-theme
+;;   :init
+;;   (setq solarized-use-less-bold t)
+;;   (setq solarized-use-more-italic t)
+;;   (setq solarized-high-contrast-mode-line t)
+;;   (setq solarized-use-variable-pitch nil)
+;;   (setq solarized-scale-org-headlines nil)
+;;   (setq solarized-height-minus-1 1)
+;;   (setq solarized-height-plus-1 1)
+;;   (setq solarized-height-plus-2 1)
+;;   (setq solarized-height-plus-3 1)
+;;   (setq solarized-height-plus-4 1)
+;;   :ensure t
+;;   :config
+;;   (load-theme 'solarized-dark t))
 
 ;; (use-package atom-dark-theme
 ;;   :ensure t)
@@ -62,10 +62,15 @@
 ;; 	doom-themes-enable-italic t)
 ;;   (load-theme 'doom-one t))
 
-;; (use-package night-owl-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'night-owl t))
+(use-package night-owl-theme
+  :ensure t
+  :config
+  (setq night-owl-height-minus-1 1)
+  (setq night-owl-height-plus-1 1)
+  (setq night-owl-height-plus-2 1)
+  (setq night-owl-height-plus-3 1)
+  (setq night-owl-height-plus-4 1)  
+  (load-theme 'night-owl t))
 
 (use-package powerline
   :ensure t
