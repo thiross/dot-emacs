@@ -8,13 +8,11 @@
   (let ((en-font
 	 (cond
 	  ((eq system-type 'darwin)
-	   (font-spec :family "Iosevka SS07"
-		      :size 16))
-	  (t
-	   (font-spec :family "Iosevka SS07"
+	   (font-spec :family "Jetbrains Mono"
 		      :size 13))
-	  )
-	 ))
+	  (t
+	   (font-spec :family "Jetbrains Mono"
+		      :size 13)))))
     (set-frame-font en-font))
   (let ((zh-font
 	 (cond
