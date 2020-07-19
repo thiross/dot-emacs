@@ -9,10 +9,10 @@
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family "Jetbrains Mono"
-		      :size 14))
+		      :size 14.0))
 	  (t
 	   (font-spec :family "Jetbrains Mono"
-		      :size 13)))))
+		      :size 13.0)))))
     (set-frame-font en-font))
   (let ((zh-font
 	 (cond
