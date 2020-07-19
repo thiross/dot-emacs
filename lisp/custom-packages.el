@@ -145,6 +145,7 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
+  :hook (python-mode . lsp)
   :config
   (require 'lsp-clients)
   (setq lsp-enable-snippet nil))
