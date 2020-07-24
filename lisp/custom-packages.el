@@ -79,24 +79,15 @@
   :config
   (bind-key "<f2>" 'magit-status))
 
-(use-package ivy
+(use-package helm
   :ensure t
-  :config
-  (ivy-mode 1)
-  (setq ivy-display-style 'fancy)
-  (setq ivy-use-virtual-buffers t))
+  :bind (("C-x C-f" . helm-find-files)
+	 :map helm-map
+	 ("<tab>" . helm-execute-persistent-action)))
 
-(use-package counsel
+(use-package helm-ag
   :ensure t
-  :config
-  (bind-key "C-x C-f" 'counsel-find-file))
-
-(use-package swiper
-  :ensure t
-  :config
-  (bind-key "C-s" 'swiper)
-  (setq counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s")
-  (bind-key "<f10>" 'counsel-ag))
+  :bind (("<f10>" . helm-ag)))
 
 (use-package lua-mode
   :ensure t
@@ -151,14 +142,20 @@
   (setq lsp-enable-snippet nil))
 
 (use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-enable nil))
+
+(use-package helm-lsp
+  :ensure t
+  :commands helm-lsp-workspace-symbol)
+
+(use-package flycheck
   :ensure t)
 
-(use-package lsp-ivy
-  :ensure t
-  :commands lsp-ivy-workspace-symbol)
-
-;; (use-package company-lsp
-;;   :ensure t)
+(use-package company
+  :ensure t)
 
 (use-package rust-mode
   :ensure t

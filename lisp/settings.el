@@ -28,8 +28,7 @@
     (set-fontset-font t 'symbol zh-font)
     (set-fontset-font t 'cjk-misc zh-font)
     (set-fontset-font t 'bopomofo zh-font))
-  (setq-default line-spacing 0.2)
-  (setq erc-server-coding-system '(utf-8 . utf-8)))
+  (setq-default line-spacing 0.2))
 
 (defun settings-gui ()
   ;; disable menu bar

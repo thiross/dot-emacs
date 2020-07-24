@@ -39,3 +39,17 @@
 (settings-set-all)
 
 (require 'custom-packages)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yaml-mode typescript-mode toml-mode solarized-theme powerline org-bullets magit lua-mode lsp-ui lsp-ivy json-mode haskell-mode groovy-mode glsl-mode dockerfile-mode counsel cmake-mode cargo auctex))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
