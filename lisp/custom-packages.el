@@ -82,6 +82,7 @@
 (use-package helm
   :ensure t
   :bind (("C-x C-f" . helm-find-files)
+	 ("M-x" . helm-M-x)
 	 :map helm-map
 	 ("<tab>" . helm-execute-persistent-action)))
 
