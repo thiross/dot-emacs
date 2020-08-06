@@ -91,6 +91,7 @@
   (settings-lang&font)
   (settings-gui)
   (settings-file)
-  (settings-bind-global-keys))
+  (settings-bind-global-keys)
+  (setq ispell-program-name "aspell"))
 
 (provide 'settings)

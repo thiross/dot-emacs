@@ -4,7 +4,6 @@
 
 ;; libraries
 (require 'package)
-(require 'bind-key)
 (require 'use-package)
 
 (package-initialize)
@@ -77,18 +76,23 @@
 (use-package magit
   :ensure t
   :config
-  (bind-key "<f2>" 'magit-status))
+  :bind (("<f2>". magit-status)))
 
-(use-package helm
+(use-package ivy
   :ensure t
-  :bind (("C-x C-f" . helm-find-files)
-	 ("M-x" . helm-M-x)
-	 :map helm-map
-	 ("<tab>" . helm-execute-persistent-action)))
+  :config
+  (setq ivy-display-style 'fancy)
+  (setq ivy-use-virtual-buffers t))
 
-(use-package helm-ag
+(use-package counsel
   :ensure t
-  :bind (("<f10>" . helm-ag)))
+  :bind (("C-x C-f" . counsel-find-file)))
+
+(use-package swiper
+  :bind (("C-s" . swiper)
+	 ("<f10>" . counsel-ag))
+  :config
+  (setq counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s"))
 
 (use-package lua-mode
   :ensure t
@@ -120,19 +124,20 @@
   	 . (lambda ()
 	     (haskell-indentation-mode)
 	     (setq haskell-compile-cabal-build-command "stack build")))
+  :bind (:map haskell-mode-map
+	 ("<f4>" . haskell-compile)
+	 ("C-c C-f" . haskell-cabal-visit-file)
+	 ("M-q" . (lambda ()
+		    (interactive)
+		    (haskell-mode-stylish-buffer)
+		    (haskell-mode-buffer-apply-command "brittany")))
+	 :map haskell-cabal-mode-map
+	 ("<f4>" . haskell-compile)
+	 ("C-c C-c" . haskell-compile))
   :config
-  (bind-key "C-c C-f" 'haskell-cabal-visit-file haskell-mode-map)
-  (bind-key "<f4>" 'haskell-compile haskell-cabal-mode-map)
-  (bind-key "C-c C-c" 'haskell-compile haskell-cabal-mode-map)
-  (bind-key "<f4>" 'haskell-compile haskell-mode-map)
   (defun brittany()
     (interactive)
-    (haskell-mode-buffer-apply-command "brittany"))
-  (bind-key "M-q" (lambda ()
-			(interactive)
-			(haskell-mode-stylish-buffer)
-			(haskell-mode-buffer-apply-command "brittany"))
-	    haskell-mode-map))
+    (haskell-mode-buffer-apply-command "brittany")))
 
 (use-package lsp-mode
   :ensure t
@@ -148,9 +153,8 @@
   :config
   (setq lsp-ui-doc-enable nil))
 
-(use-package helm-lsp
-  :ensure t
-  :commands helm-lsp-workspace-symbol)
+(use-package lsp-ivy
+ :ensure t)
 
 (use-package flycheck
   :ensure t)
@@ -160,7 +164,9 @@
 
 (use-package rust-mode
   :ensure t
-  :hook (rust-mode . lsp))
+  :hook (rust-mode . lsp)
+  :config
+  (setq lsp-rust-server 'rust-analyzer))
 
 (use-package cargo
   :ensure t
