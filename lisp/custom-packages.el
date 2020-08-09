@@ -86,7 +86,8 @@
 
 (use-package counsel
   :ensure t
-  :bind (("C-x C-f" . counsel-find-file)))
+  :bind (("C-x C-f" . counsel-find-file)
+	 ("M-x" . counsel-M-x)))
 
 (use-package swiper
   :bind (("C-s" . swiper)
