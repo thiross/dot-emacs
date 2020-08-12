@@ -67,7 +67,10 @@
   ;; do not backup files
   (setq make-backup-files nil)
   ;; do not auto save files
-  (setq auto-save-default nil))
+  (setq auto-save-default nil)
+  ;; set default directory
+  (if (eq system-type 'darwin)
+      (setq default-directory "~/")))
 
 ;;; open line function
 (defun settings-open-line (n)
