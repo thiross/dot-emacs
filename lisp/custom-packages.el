@@ -6,8 +6,6 @@
 (require 'package)
 (require 'use-package)
 
-(package-initialize)
-
 (use-package solarized-theme
   :init
   (setq solarized-use-less-bold t)
@@ -78,11 +76,17 @@
   :config
   :bind (("<f2>". magit-status)))
 
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
+
 (use-package ivy
   :ensure t
   :config
   (setq ivy-display-style 'fancy)
-  (setq ivy-use-virtual-buffers t))
+  (setq ivy-use-virtual-buffers t)
+  (ivy-mode 1))
 
 (use-package counsel
   :ensure t
@@ -143,10 +147,12 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
-  :hook (python-mode . lsp)
+  :hook ((python-mode . lsp)
+	 (rust-mode . lsp)
+	 (lsp-mode . lsp-enable-which-key-integration))
   :config
-  (require 'lsp-clients)
-  (setq lsp-enable-snippet nil))
+  (setq lsp-enable-snippet nil)
+  (setq lsp-rust-server 'rust-analyzer))
 
 (use-package lsp-ui
   :ensure t
@@ -164,10 +170,7 @@
   :ensure t)
 
 (use-package rust-mode
-  :ensure t
-  :hook (rust-mode . lsp)
-  :config
-  (setq lsp-rust-server 'rust-analyzer))
+  :ensure t)
 
 (use-package cargo
   :ensure t

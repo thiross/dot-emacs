@@ -8,8 +8,8 @@
   (let ((en-font
 	 (cond
 	  ((eq system-type 'darwin)
-	   (font-spec :family "Jetbrains Mono"
-		      :size 14.0))
+	   (font-spec :family "Input"
+		      :size 13.0))
 	  (t
 	   (font-spec :family "Jetbrains Mono"
 		      :size 13.0)))))
@@ -18,10 +18,10 @@
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family "手札体-简"
-		      :size 16))
+		      :size 16.0))
 	  (t
 	   (font-spec :family "微软雅黑"
-		      :size 14))
+		      :size 14.0))
 	  )
 	 ))
     (set-fontset-font t 'han zh-font)
@@ -95,6 +95,8 @@
   (settings-gui)
   (settings-file)
   (settings-bind-global-keys)
-  (setq ispell-program-name "aspell"))
+  (setq ispell-program-name "aspell")
+  (setq gc-cons-threshold (* 1024 1024 200))
+  (setq read-process-output-max (* 1024 1024)))
 
 (provide 'settings)
