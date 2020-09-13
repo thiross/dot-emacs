@@ -9,19 +9,19 @@
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family "Jetbrains Mono"
-		      :size 14.0))
+		      :size 13.0))
 	  (t
-	   (font-spec :family "Jetbrains Mono"
-		      :size 13.0)))))
+	   (font-spec :family "Input"
+		      :size 10.0)))))
     (set-frame-font en-font))
   (let ((zh-font
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family "手札体-简"
-		      :size 16))
+		      :size 16.0))
 	  (t
 	   (font-spec :family "微软雅黑"
-		      :size 14))
+		      :size 12.0))
 	  )
 	 ))
     (set-fontset-font t 'han zh-font)
