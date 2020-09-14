@@ -6,7 +6,53 @@
 (require 'package)
 (require 'use-package)
 
+(use-package composite
+  :defer t
+  :init
+  (defvar composition-ligature-table (make-char-table nil))
+  :hook
+  (((prog-mode conf-mode nxml-mode markdown-mode help-mode)
+    . (lambda () (setq-local composition-function-table composition-ligature-table))))
+  :config
+  ;; support ligatures, some toned down to prevent hang
+  (when (version<= "27.0" emacs-version)
+    (let ((alist
+           '((33 . ".\\(?:\\(==\\|[!=]\\)[!=]?\\)")
+             (35 . ".\\(?:\\(###?\\|_(\\|[(:=?[_{]\\)[#(:=?[_{]?\\)")
+             (36 . ".\\(?:\\(>\\)>?\\)")
+             (37 . ".\\(?:\\(%\\)%?\\)")
+             (38 . ".\\(?:\\(&\\)&?\\)")
+             (42 . ".\\(?:\\(\\*\\*\\|[*>]\\)[*>]?\\)")
+             ;; (42 . ".\\(?:\\(\\*\\*\\|[*/>]\\).?\\)")
+             (43 . ".\\(?:\\([>]\\)>?\\)")
+             ;; (43 . ".\\(?:\\(\\+\\+\\|[+>]\\).?\\)")
+             (45 . ".\\(?:\\(-[->]\\|<<\\|>>\\|[-<>|~]\\)[-<>|~]?\\)")
+             ;; (46 . ".\\(?:\\(\\.[.<]\\|[-.=]\\)[-.<=]?\\)")
+             (46 . ".\\(?:\\(\\.<\\|[-=]\\)[-<=]?\\)")
+             (47 . ".\\(?:\\(//\\|==\\|[=>]\\)[/=>]?\\)")
+             ;; (47 . ".\\(?:\\(//\\|==\\|[*/=>]\\).?\\)")
+             (48 . ".\\(?:\\(x[a-fA-F0-9]\\).?\\)")
+             (58 . ".\\(?:\\(::\\|[:<=>]\\)[:<=>]?\\)")
+             (59 . ".\\(?:\\(;\\);?\\)")
+             (60 . ".\\(?:\\(!--\\|\\$>\\|\\*>\\|\\+>\\|-[-<>|]\\|/>\\|<[-<=]\\|=[<>|]\\|==>?\\||>\\||||?\\|~[>~]\\|[$*+/:<=>|~-]\\)[$*+/:<=>|~-]?\\)")
+             (61 . ".\\(?:\\(!=\\|/=\\|:=\\|<<\\|=[=>]\\|>>\\|[=>]\\)[=<>]?\\)")
+             (62 . ".\\(?:\\(->\\|=>\\|>[-=>]\\|[-:=>]\\)[-:=>]?\\)")
+             (63 . ".\\(?:\\([.:=?]\\)[.:=?]?\\)")
+             (91 . ".\\(?:\\(|\\)[]|]?\\)")
+             ;; (92 . ".\\(?:\\([\\n]\\)[\\]?\\)")
+             (94 . ".\\(?:\\(=\\)=?\\)")
+             (95 . ".\\(?:\\(|_\\|[_]\\)_?\\)")
+             (119 . ".\\(?:\\(ww\\)w?\\)")
+             (123 . ".\\(?:\\(|\\)[|}]?\\)")
+             (124 . ".\\(?:\\(->\\|=>\\||[-=>]\\||||*>\\|[]=>|}-]\\).?\\)")
+             (126 . ".\\(?:\\(~>\\|[-=>@~]\\)[-=>@~]?\\)"))))
+      (dolist (char-regexp alist)
+        (set-char-table-range composition-ligature-table (car char-regexp)
+                              `([,(cdr char-regexp) 0 font-shape-gstring]))))
+    (set-char-table-parent composition-ligature-table composition-function-table)))
+
 (use-package solarized-theme
+  :ensure t
   :init
   (setq solarized-use-less-bold t)
   (setq solarized-use-more-italic t)
@@ -18,53 +64,8 @@
   (setq solarized-height-plus-2 1)
   (setq solarized-height-plus-3 1)
   (setq solarized-height-plus-4 1)
-  :ensure t
   :config
   (load-theme 'solarized-dark t))
-
-;; (use-package atom-dark-theme
-;;   :ensure t)
-
-;; (use-package monokai-theme
-;;   :ensure t)
-
-;; (use-package molokai-theme
-;;   :ensure t)
-
-;; (use-package atom-one-dark-theme
-;;   :ensure t)
-
-;; (use-package moe-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'moe-dark t))
-
-;; (use-package material-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'material t))
-
-;; (use-package nord-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'nord t))
-
-;; (use-package doom-themes
-;;   :ensure t
-;;   :config
-;;   (setq doom-themes-enable-bold t
-;; 	doom-themes-enable-italic t)
-;;   (load-theme 'doom-one t))
-
-;; (use-package night-owl-theme
-;;   :ensure t
-;;   :config
-;;   (setq night-owl-height-minus-1 1)
-;;   (setq night-owl-height-plus-1 1)
-;;   (setq night-owl-height-plus-2 1)
-;;   (setq night-owl-height-plus-3 1)
-;;   (setq night-owl-height-plus-4 1)  
-;;   (load-theme 'night-owl t))
 
 (use-package powerline
   :ensure t
