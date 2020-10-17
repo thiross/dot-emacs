@@ -186,6 +186,10 @@
 (use-package markdown-mode
   :ensure t)
 
+(use-package elm-mode
+  :ensure t
+  :config)
+
 (use-package auctex
   :defer t
   :ensure t)
