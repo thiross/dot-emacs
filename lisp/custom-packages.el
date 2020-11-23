@@ -51,31 +51,31 @@
                               `([,(cdr char-regexp) 0 font-shape-gstring]))))
     (set-char-table-parent composition-ligature-table composition-function-table)))
 
-;; (use-package solarized-theme
-;;   :ensure t
-;;   :init
-;;   (setq solarized-use-less-bold t)
-;;   (setq solarized-use-more-italic t)
-;;   (setq solarized-high-contrast-mode-line t)
-;;   (setq solarized-use-variable-pitch nil)
-;;   (setq solarized-scale-org-headlines nil)
-;;   (setq solarized-height-minus-1 1)
-;;   (setq solarized-height-plus-1 1)
-;;   (setq solarized-height-plus-2 1)
-;;   (setq solarized-height-plus-3 1)
-;;   (setq solarized-height-plus-4 1)
-;;   :config
-;;   (load-theme 'solarized-dark t))
-
-(use-package night-owl-theme
+(use-package solarized-theme
   :ensure t
+  :init
+  (setq solarized-use-less-bold t)
+  (setq solarized-use-more-italic t)
+  (setq solarized-high-contrast-mode-line t)
+  (setq solarized-use-variable-pitch nil)
+  (setq solarized-scale-org-headlines nil)
+  (setq solarized-height-minus-1 1)
+  (setq solarized-height-plus-1 1)
+  (setq solarized-height-plus-2 1)
+  (setq solarized-height-plus-3 1)
+  (setq solarized-height-plus-4 1)
   :config
-  (setq night-owl-height-minus-1 1)
-  (setq night-owl-height-plus-1 1)
-  (setq night-owl-height-plus-2 1)
-  (setq night-owl-height-plus-3 1)
-  (setq night-owl-height-plus-4 1)  
-  (load-theme 'night-owl t))
+  (load-theme 'solarized-dark t))
+
+;; (use-package night-owl-theme
+;;   :ensure t
+;;   :config
+;;   (setq night-owl-height-minus-1 1)
+;;   (setq night-owl-height-plus-1 1)
+;;   (setq night-owl-height-plus-2 1)
+;;   (setq night-owl-height-plus-3 1)
+;;   (setq night-owl-height-plus-4 1)
+;;   (load-theme 'night-owl t))
 
 (use-package powerline
   :ensure t
