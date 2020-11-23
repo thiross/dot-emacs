@@ -8,7 +8,7 @@
   (let ((en-font
 	 (cond
 	  ((eq system-type 'darwin)
-	   (font-spec :family "JetBrains Mono"
+	   (font-spec :family "Input"
 		      :size 13.0))
 	  (t
 	   (font-spec :family "Input"
