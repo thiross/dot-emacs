@@ -8,8 +8,9 @@
   (let ((en-font
 	 (cond
 	  ((eq system-type 'darwin)
-	   (font-spec :family "Input"
-		      :size 13.0))
+	   (font-spec :family "Fira Code"
+		      :size 13.0
+		      :weight 'semi-bold))
 	  (t
 	   (font-spec :family "Input"
 		      :size 10.0)))))
