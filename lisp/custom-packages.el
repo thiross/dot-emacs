@@ -67,6 +67,16 @@
   :config
   (load-theme 'solarized-dark t))
 
+;; (use-package night-owl-theme
+;;   :ensure t
+;;   :config
+;;   (setq night-owl-height-minus-1 1)
+;;   (setq night-owl-height-plus-1 1)
+;;   (setq night-owl-height-plus-2 1)
+;;   (setq night-owl-height-plus-3 1)
+;;   (setq night-owl-height-plus-4 1)
+;;   (load-theme 'night-owl t))
+
 (use-package powerline
   :ensure t
   :config
@@ -104,7 +114,7 @@
   :ensure t
   :config
   :hook (lua-mode . (lambda ()
-	      (electric-indent-mode -1))))
+		      (electric-indent-mode -1))))
 
 (use-package cmake-mode
   :ensure t)
@@ -131,15 +141,15 @@
 	     (haskell-indentation-mode)
 	     (setq haskell-compile-cabal-build-command "stack build")))
   :bind (:map haskell-mode-map
-	 ("<f4>" . haskell-compile)
-	 ("C-c C-f" . haskell-cabal-visit-file)
-	 ("M-q" . (lambda ()
-		    (interactive)
-		    (haskell-mode-stylish-buffer)
-		    (haskell-mode-buffer-apply-command "brittany")))
-	 :map haskell-cabal-mode-map
-	 ("<f4>" . haskell-compile)
-	 ("C-c C-c" . haskell-compile))
+	      ("<f4>" . haskell-compile)
+	      ("C-c C-f" . haskell-cabal-visit-file)
+	      ("M-q" . (lambda ()
+			 (interactive)
+			 (haskell-mode-stylish-buffer)
+			 (haskell-mode-buffer-apply-command "brittany")))
+	      :map haskell-cabal-mode-map
+	      ("<f4>" . haskell-compile)
+	      ("C-c C-c" . haskell-compile))
   :config
   (defun brittany()
     (interactive)
@@ -162,7 +172,7 @@
   (setq lsp-ui-doc-enable nil))
 
 (use-package lsp-ivy
- :ensure t)
+  :ensure t)
 
 (use-package flycheck
   :ensure t)
