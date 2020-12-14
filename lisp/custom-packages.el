@@ -160,6 +160,7 @@
   :commands lsp
   :hook ((python-mode . lsp)
 	 (rust-mode . lsp)
+	 (elm-mode . lsp)
 	 (lsp-mode . lsp-enable-which-key-integration))
   :config
   (setq lsp-enable-snippet nil)

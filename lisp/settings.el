@@ -8,8 +8,8 @@
   (let ((en-font
 	 (cond
 	  ((eq system-type 'darwin)
-	   (font-spec :family "Fira Code"
-		      :size 13.0
+	   (font-spec :family "Iosevka Custom"
+		      :size 15.0
 		      :weight 'semi-bold))
 	  (t
 	   (font-spec :family "Input"
@@ -19,7 +19,7 @@
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family "手札体-简"
-		      :size 16.0))
+		      :size 18.0))
 	  (t
 	   (font-spec :family "微软雅黑"
 		      :size 12.0))
