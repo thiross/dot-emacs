@@ -9,7 +9,7 @@
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family "Iosevka Custom"
-		      :size 15.0
+		      :size 14.0
 		      :weight 'semi-bold))
 	  (t
 	   (font-spec :family "Input"
@@ -19,7 +19,7 @@
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family "手札体-简"
-		      :size 18.0))
+		      :size 16.0))
 	  (t
 	   (font-spec :family "微软雅黑"
 		      :size 12.0))
