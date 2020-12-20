@@ -11,9 +11,13 @@
 	   (font-spec :family "Iosevka Custom"
 		      :size 14.0
 		      :weight 'semi-bold))
+	  ((eq system-type 'gnu/linux)
+	   (font-spec :family "Iosevka Custom"
+		      :size 20.0
+		      :weight 'semi-bold))
 	  (t
-	   (font-spec :family "Input"
-		      :size 10.0)))))
+	   (font-spec :family "Iosevka Custom"
+		      :size 9.0)))))
     (set-frame-font en-font))
   (let ((zh-font
 	 (cond
