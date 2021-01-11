@@ -155,12 +155,16 @@
     (interactive)
     (haskell-mode-buffer-apply-command "brittany")))
 
+(use-package project
+  :ensure t)
+
 (use-package lsp-mode
   :ensure t
   :commands lsp
   :hook ((python-mode . lsp)
 	 (rust-mode . lsp)
 	 (elm-mode . lsp)
+	 (typescript-mode . lsp)
 	 (lsp-mode . lsp-enable-which-key-integration))
   :config
   (setq lsp-enable-snippet nil)
