@@ -115,9 +115,9 @@
   :config
   :hook (lua-mode . (lambda ()
 		      (electric-indent-mode -1))))
-
-(use-package cmake-mode
-  :ensure t)
+(if (not (eq system-type 'gnu/linux))
+    (use-package cmake-mode
+      :ensure t))
 
 (use-package dockerfile-mode
   :ensure t)
