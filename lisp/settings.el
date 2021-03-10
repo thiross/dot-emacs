@@ -5,18 +5,19 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'utf-8)
   (modify-coding-system-alist 'process "ghci" 'utf-8)
-  (let ((en-font
+  (let* ((font-name "Fira Code")
+	(en-font
 	 (cond
 	  ((eq system-type 'darwin)
-	   (font-spec :family "Iosevka Custom"
-		      :size 14.0
+	   (font-spec :family font-name
+		      :size 13
 		      :weight 'semi-bold))
 	  ((eq system-type 'gnu/linux)
-	   (font-spec :family "Iosevka Custom"
+	   (font-spec :family font-name
 		      :size 20.0
 		      :weight 'semi-bold))
 	  (t
-	   (font-spec :family "Iosevka Custom"
+	   (font-spec :family font-name
 		      :size 9.0)))))
     (set-frame-font en-font))
   (let ((zh-font

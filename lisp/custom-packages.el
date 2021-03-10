@@ -142,8 +142,7 @@
 	     (setq haskell-compile-cabal-build-command "stack build")))
   :bind (:map haskell-mode-map
 	      ("<f4>" . haskell-compile)
-	      ("C-c C-f" . haskell-cabal-visit-file)
-	      ("M-q" . (lambda ()
+	      ("C-c C-f" . (lambda ()
 			 (interactive)
 			 (haskell-mode-stylish-buffer)
 			 (haskell-mode-buffer-apply-command "brittany")))
