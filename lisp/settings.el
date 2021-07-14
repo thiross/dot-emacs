@@ -5,12 +5,12 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'utf-8)
   (modify-coding-system-alist 'process "ghci" 'utf-8)
-  (let* ((font-name "Input")
+  (let* ((font-name "monolisa")
 	(en-font
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family font-name
-		      :size 13
+		      :size 14.0
 		      :weight 'semi-bold))
 	  ((eq system-type 'gnu/linux)
 	   (font-spec :family font-name

@@ -168,6 +168,8 @@
 	 (lsp-mode . lsp-enable-which-key-integration))
   :config
   (setq lsp-enable-snippet nil)
+  (setq lsp-eldoc-enable-hover nil)
+  (setq lsp-signature-render-documentation nil)
   (setq lsp-rust-server 'rust-analyzer))
 
 (use-package lsp-ui
