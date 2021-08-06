@@ -11,11 +11,11 @@
 	  ((eq system-type 'darwin)
 	   (font-spec :family font-name
 		      :size 14.0
-		      :weight 'semi-bold))
+		      :weight 'bold))
 	  ((eq system-type 'gnu/linux)
 	   (font-spec :family font-name
 		      :size 20.0
-		      :weight 'semi-bold))
+		      :weight 'bold))
 	  (t
 	   (font-spec :family font-name
 		      :size 9.0)))))
@@ -102,7 +102,7 @@
   (settings-file)
   (settings-bind-global-keys)
   (setq ispell-program-name "aspell")
-  (setq gc-cons-threshold (* 1024 1024 200))
+  (setq gc-cons-threshold (* 1024 1024 500))
   (setq read-process-output-max (* 1024 1024)))
 
 (provide 'settings)

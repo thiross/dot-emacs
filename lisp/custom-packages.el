@@ -161,6 +161,7 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
+  :config (setq lsp-auto-guess-root t)
   :hook ((python-mode . lsp)
 	 (rust-mode . lsp)
 	 (elm-mode . lsp)
@@ -210,6 +211,12 @@
 (use-package auctex
   :defer t
   :ensure t)
+
+(use-package org-roam
+  :defer t
+  :ensure t
+  :config
+  (setq org-roam-v2-ack t))
 
 (use-package org-bullets
   :ensure t
