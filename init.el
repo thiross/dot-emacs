@@ -46,7 +46,7 @@
  ;; If there is more than one, they won't work right.
  '(org-export-backends '(ascii html icalendar latex md odt))
  '(package-selected-packages
-   '(project yaml-mode typescript-mode toml-mode solarized-theme powerline org-bullets magit lua-mode lsp-ui lsp-ivy json-mode haskell-mode groovy-mode glsl-mode dockerfile-mode counsel cmake-mode cargo auctex)))
+   '(all-the-icons project yaml-mode typescript-mode toml-mode solarized-theme powerline org-bullets magit lua-mode lsp-ui lsp-ivy json-mode haskell-mode groovy-mode glsl-mode dockerfile-mode counsel cmake-mode cargo auctex)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

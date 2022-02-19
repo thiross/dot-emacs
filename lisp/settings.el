@@ -5,16 +5,16 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'utf-8)
   (modify-coding-system-alist 'process "ghci" 'utf-8)
-  (let* ((font-name "JetBrains Mono")
+  (let* ((font-name "Hasklig")
 	(en-font
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family font-name
-		      :size 14.0
+		      :size 16.0
 		      :weight 'semi-bold))
 	  ((eq system-type 'gnu/linux)
 	   (font-spec :family font-name
-		      :size 20.0
+		      :size 19.0
 		      :weight 'normal))
 	  (t
 	   (font-spec :family font-name
@@ -28,13 +28,12 @@
 	  (t
 	   (font-spec :family "微软雅黑"
 		      :size 12.0))
-	  )
-	 ))
+	  )))
     (set-fontset-font t 'han zh-font)
     (set-fontset-font t 'symbol zh-font)
     (set-fontset-font t 'cjk-misc zh-font)
     (set-fontset-font t 'bopomofo zh-font))
-  (setq-default line-spacing 0.2))
+  (setq-default line-spacing 0.1))
 
 (defun settings-gui ()
   ;; disable menu bar
