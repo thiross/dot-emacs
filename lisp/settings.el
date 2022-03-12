@@ -5,7 +5,7 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'utf-8)
   (modify-coding-system-alist 'process "ghci" 'utf-8)
-  (let* ((font-name "Hasklig")
+  (let* ((font-name "Monolisa")
 	(en-font
 	 (cond
 	  ((eq system-type 'darwin)
