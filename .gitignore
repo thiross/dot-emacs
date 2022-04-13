@@ -12,3 +12,4 @@ server
 /.org-id-locations
 /bookmarks
 /tramp
+*.db
