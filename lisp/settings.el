@@ -5,7 +5,7 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'utf-8)
   (modify-coding-system-alist 'process "ghci" 'utf-8)
-  (let* ((font-name "Hasklig")
+  (let* ((font-name "Monolisa")
 	(en-font
 	 (cond
 	  ((eq system-type 'darwin)
@@ -14,7 +14,7 @@
 		      :weight 'semi-bold))
 	  ((eq system-type 'gnu/linux)
 	   (font-spec :family font-name
-		      :size 19.0
+		      :size 20.0
 		      :weight 'normal))
 	  (t
 	   (font-spec :family font-name
@@ -33,7 +33,7 @@
     (set-fontset-font t 'symbol zh-font)
     (set-fontset-font t 'cjk-misc zh-font)
     (set-fontset-font t 'bopomofo zh-font))
-  (setq-default line-spacing 0.1))
+  (setq-default line-spacing 0.3))
 
 (defun settings-gui ()
   ;; disable menu bar

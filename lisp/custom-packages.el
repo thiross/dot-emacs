@@ -166,35 +166,17 @@
 (use-package project
   :ensure t)
 
-(use-package lsp-mode
+(use-package eglot
   :ensure t
-  :commands lsp
-  :config (setq lsp-auto-guess-root t)
-  :hook ((python-mode . lsp)
-	 (rust-mode . lsp)
-	 (elm-mode . lsp)
-	 (typescript-mode . lsp)
-	 (lsp-mode . lsp-enable-which-key-integration))
-  :config
-  (setq lsp-enable-snippet nil)
-  (setq lsp-eldoc-enable-hover nil)
-  (setq lsp-signature-render-documentation nil)
-  (setq lsp-rust-server 'rust-analyzer))
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable nil))
-
-(use-package lsp-ivy
-  :ensure t)
+  :hook ((rust-mode . eglot-ensure)))
 
 (use-package flycheck
   :ensure t)
 
 (use-package company
-  :ensure t)
+  :ensure t
+  :config
+  (global-company-mode))
 
 (use-package rust-mode
   :ensure t)
