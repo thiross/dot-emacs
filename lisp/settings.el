@@ -14,7 +14,7 @@
 		      :weight 'semi-bold))
 	  ((eq system-type 'gnu/linux)
 	   (font-spec :family font-name
-		      :size 19.0
+		      :size 20.0
 		      :weight 'normal))
 	  (t
 	   (font-spec :family font-name
@@ -33,7 +33,7 @@
     (set-fontset-font t 'symbol zh-font)
     (set-fontset-font t 'cjk-misc zh-font)
     (set-fontset-font t 'bopomofo zh-font))
-  (setq-default line-spacing 0.1))
+  (setq-default line-spacing 0.3))
 
 (defun settings-gui ()
   ;; disable menu bar
