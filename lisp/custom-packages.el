@@ -168,6 +168,8 @@
 
 (use-package eglot
   :ensure t
+  :config
+  (setq eldoc-echo-area-use-multiline-p nil)
   :hook ((rust-mode . eglot-ensure)))
 
 (use-package flycheck
