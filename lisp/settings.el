@@ -14,7 +14,7 @@
 		      :weight 'semi-bold))
 	  ((eq system-type 'gnu/linux)
 	   (font-spec :family font-name
-		      :size 20.0
+		      :size 18.0
 		      :weight 'normal))
 	  (t
 	   (font-spec :family font-name

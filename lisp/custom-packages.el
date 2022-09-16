@@ -51,39 +51,39 @@
                               `([,(cdr char-regexp) 0 font-shape-gstring]))))
     (set-char-table-parent composition-ligature-table composition-function-table)))
 
-;; (use-package solarized-theme
-;;   :ensure t
-;;   :init
-;;   (setq solarized-use-less-bold t)
-;;   (setq solarized-use-more-italic t)
-;;   (setq solarized-high-contrast-mode-line t)
-;;   (setq solarized-use-variable-pitch nil)
-;;   (setq solarized-scale-org-headlines nil)
-;;   (setq solarized-height-minus-1 1)
-;;   (setq solarized-height-plus-1 1)
-;;   (setq solarized-height-plus-2 1)
-;;   (setq solarized-height-plus-3 1)
-;;   (setq solarized-height-plus-4 1)
-;;   :config
-;;   (load-theme 'solarized-dark t))
-
-(use-package doom-themes
+(use-package solarized-theme
   :ensure t
+  :init
+  (setq solarized-use-less-bold t)
+  (setq solarized-use-more-italic t)
+  (setq solarized-high-contrast-mode-line t)
+  (setq solarized-use-variable-pitch nil)
+  (setq solarized-scale-org-headlines nil)
+  (setq solarized-height-minus-1 1)
+  (setq solarized-height-plus-1 1)
+  (setq solarized-height-plus-2 1)
+  (setq solarized-height-plus-3 1)
+  (setq solarized-height-plus-4 1)
   :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
+  (load-theme 'solarized-dark t))
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   ;; Global settings (defaults)
+;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+;;   (load-theme 'doom-one t)
+
+;;   ;; Enable flashing mode-line on errors
+;;   (doom-themes-visual-bell-config)
+;;   ;; Enable custom neotree theme (all-the-icons must be installed!)
+;;   (doom-themes-neotree-config)
+;;   ;; or for treemacs users
+;;   (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+;;   (doom-themes-treemacs-config)
+;;   ;; Corrects (and improves) org-mode's native fontification.
+;;   (doom-themes-org-config))
 
 (use-package powerline
   :ensure t
@@ -170,6 +170,14 @@
   :ensure t
   :config
   (setq eldoc-echo-area-use-multiline-p nil)
+  (put 'eglot-note 'flymake-overlay-control nil)
+  (put 'eglot-warning 'flymake-overlay-control nil)
+  (put 'eglot-error 'flymake-overlay-control nil)
+  :bind (:map eglot-mode-map
+	      ("C-c a" . eglot-code-actions)
+	      ("C-c h" . eldoc)
+	      ("C-c o" . eglot-code-action-organize-imports)
+	      ("C-c r" . eglot-rename))
   :hook ((rust-mode . eglot-ensure)))
 
 (use-package flycheck
