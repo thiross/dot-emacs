@@ -208,6 +208,13 @@
   :ensure t
   :config)
 
+(use-package dhall-mode
+  :ensure t
+  :config
+  (setq
+   dhall-format-arguments (\` ("--ascii"))
+   dhall-use-header-line nil))
+
 (use-package auctex
   :defer t
   :ensure t)
