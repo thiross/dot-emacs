@@ -17,38 +17,38 @@
   ;; support ligatures, some toned down to prevent hang
   (when (version<= "27.0" emacs-version)
     (let ((alist
-           '((33 . ".\\(?:\\(==\\|[!=]\\)[!=]?\\)")
-             (35 . ".\\(?:\\(###?\\|_(\\|[(:=?[_{]\\)[#(:=?[_{]?\\)")
-             (36 . ".\\(?:\\(>\\)>?\\)")
-             (37 . ".\\(?:\\(%\\)%?\\)")
-             (38 . ".\\(?:\\(&\\)&?\\)")
-             (42 . ".\\(?:\\(\\*\\*\\|[*>]\\)[*>]?\\)")
-             ;; (42 . ".\\(?:\\(\\*\\*\\|[*/>]\\).?\\)")
-             (43 . ".\\(?:\\([>]\\)>?\\)")
-             ;; (43 . ".\\(?:\\(\\+\\+\\|[+>]\\).?\\)")
-             (45 . ".\\(?:\\(-[->]\\|<<\\|>>\\|[-<>|~]\\)[-<>|~]?\\)")
-             ;; (46 . ".\\(?:\\(\\.[.<]\\|[-.=]\\)[-.<=]?\\)")
-             (46 . ".\\(?:\\(\\.<\\|[-=]\\)[-<=]?\\)")
-             (47 . ".\\(?:\\(//\\|==\\|[=>]\\)[/=>]?\\)")
-             ;; (47 . ".\\(?:\\(//\\|==\\|[*/=>]\\).?\\)")
-             (48 . ".\\(?:\\(x[a-fA-F0-9]\\).?\\)")
-             ;; (58 . ".\\(?:\\(::\\|[:<=>]\\)[:<=>]?\\)")
-             (59 . ".\\(?:\\(;\\);?\\)")
-             (60 . ".\\(?:\\(!--\\|\\$>\\|\\*>\\|\\+>\\|-[-<>|]\\|/>\\|<[-<=]\\|=[<>|]\\|==>?\\||>\\||||?\\|~[>~]\\|[$*+/:<=>|~-]\\)[$*+/:<=>|~-]?\\)")
-             (61 . ".\\(?:\\(!=\\|/=\\|:=\\|<<\\|=[=>]\\|>>\\|[=>]\\)[=<>]?\\)")
-             (62 . ".\\(?:\\(->\\|=>\\|>[-=>]\\|[-:=>]\\)[-:=>]?\\)")
-             (63 . ".\\(?:\\([.:=?]\\)[.:=?]?\\)")
-             (91 . ".\\(?:\\(|\\)[]|]?\\)")
-             ;; (92 . ".\\(?:\\([\\n]\\)[\\]?\\)")
-             (94 . ".\\(?:\\(=\\)=?\\)")
-             (95 . ".\\(?:\\(|_\\|[_]\\)_?\\)")
-             (119 . ".\\(?:\\(ww\\)w?\\)")
-             (123 . ".\\(?:\\(|\\)[|}]?\\)")
-             (124 . ".\\(?:\\(->\\|=>\\||[-=>]\\||||*>\\|[]=>|}-]\\).?\\)")
-             (126 . ".\\(?:\\(~>\\|[-=>@~]\\)[-=>@~]?\\)"))))
+	   '((33 . ".\\(?:\\(==\\|[!=]\\)[!=]?\\)")
+	     (35 . ".\\(?:\\(###?\\|_(\\|[(:=?[_{]\\)[#(:=?[_{]?\\)")
+	     (36 . ".\\(?:\\(>\\)>?\\)")
+	     (37 . ".\\(?:\\(%\\)%?\\)")
+	     (38 . ".\\(?:\\(&\\)&?\\)")
+	     (42 . ".\\(?:\\(\\*\\*\\|[*>]\\)[*>]?\\)")
+	     ;; (42 . ".\\(?:\\(\\*\\*\\|[*/>]\\).?\\)")
+	     (43 . ".\\(?:\\([>]\\)>?\\)")
+	     ;; (43 . ".\\(?:\\(\\+\\+\\|[+>]\\).?\\)")
+	     (45 . ".\\(?:\\(-[->]\\|<<\\|>>\\|[-<>|~]\\)[-<>|~]?\\)")
+	     ;; (46 . ".\\(?:\\(\\.[.<]\\|[-.=]\\)[-.<=]?\\)")
+	     (46 . ".\\(?:\\(\\.<\\|[-=]\\)[-<=]?\\)")
+	     (47 . ".\\(?:\\(//\\|==\\|[=>]\\)[/=>]?\\)")
+	     ;; (47 . ".\\(?:\\(//\\|==\\|[*/=>]\\).?\\)")
+	     (48 . ".\\(?:\\(x[a-fA-F0-9]\\).?\\)")
+	     ;; (58 . ".\\(?:\\(::\\|[:<=>]\\)[:<=>]?\\)")
+	     (59 . ".\\(?:\\(;\\);?\\)")
+	     (60 . ".\\(?:\\(!--\\|\\$>\\|\\*>\\|\\+>\\|-[-<>|]\\|/>\\|<[-<=]\\|=[<>|]\\|==>?\\||>\\||||?\\|~[>~]\\|[$*+/:<=>|~-]\\)[$*+/:<=>|~-]?\\)")
+	     (61 . ".\\(?:\\(!=\\|/=\\|:=\\|<<\\|=[=>]\\|>>\\|[=>]\\)[=<>]?\\)")
+	     (62 . ".\\(?:\\(->\\|=>\\|>[-=>]\\|[-:=>]\\)[-:=>]?\\)")
+	     (63 . ".\\(?:\\([.:=?]\\)[.:=?]?\\)")
+	     (91 . ".\\(?:\\(|\\)[]|]?\\)")
+	     ;; (92 . ".\\(?:\\([\\n]\\)[\\]?\\)")
+	     (94 . ".\\(?:\\(=\\)=?\\)")
+	     (95 . ".\\(?:\\(|_\\|[_]\\)_?\\)")
+	     (119 . ".\\(?:\\(ww\\)w?\\)")
+	     (123 . ".\\(?:\\(|\\)[|}]?\\)")
+	     (124 . ".\\(?:\\(->\\|=>\\||[-=>]\\||||*>\\|[]=>|}-]\\).?\\)")
+	     (126 . ".\\(?:\\(~>\\|[-=>@~]\\)[-=>@~]?\\)"))))
       (dolist (char-regexp alist)
-        (set-char-table-range composition-ligature-table (car char-regexp)
-                              `([,(cdr char-regexp) 0 font-shape-gstring]))))
+	(set-char-table-range composition-ligature-table (car char-regexp)
+			      `([,(cdr char-regexp) 0 font-shape-gstring]))))
     (set-char-table-parent composition-ligature-table composition-function-table)))
 
 (use-package solarized-theme
@@ -146,25 +146,37 @@
 (use-package haskell-mode
   :ensure t
   :hook (haskell-mode
-  	 . (lambda ()
+	 . (lambda ()
 	     (haskell-indentation-mode)
 	     (setq haskell-compile-cabal-build-command "stack build")))
   :bind (:map haskell-mode-map
-	      ("<f4>" . haskell-compile)
-	      ("C-c C-f" . (lambda ()
-			 (interactive)
-			 (haskell-mode-stylish-buffer)
-			 (haskell-mode-buffer-apply-command "brittany")))
+	      ("C-c C-c C-b" . haskell-compile)
+	      ("C-c C-f" . ormolu-format-buffer)
 	      :map haskell-cabal-mode-map
-	      ("<f4>" . haskell-compile)
-	      ("C-c C-c" . haskell-compile))
-  :config
-  (defun brittany()
-    (interactive)
-    (haskell-mode-buffer-apply-command "brittany")))
+	      ("C-c C-c C-b" . haskell-compile)))
+
+(use-package ormolu
+  :ensure t)
 
 (use-package project
   :ensure t)
+
+(use-package git-gutter
+  :ensure t
+  :hook ((haskell-mode . git-gutter-mode)
+	 (rust-mode . git-gutter-mode))
+  :config
+  (setq git-gutter:update-interval 0.02))
+
+(use-package git-gutter-fringe
+  :ensure t
+  :config
+  (define-fringe-bitmap
+    'git-gutter-fr:added [224] nil nil '(center repeated))
+  (define-fringe-bitmap
+    'git-gutter-fr:modified [224] nil nil '(center repeated))
+  (define-fringe-bitmap
+    'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
 (use-package eglot
   :ensure t
@@ -178,7 +190,8 @@
 	      ("C-c h" . eldoc)
 	      ("C-c o" . eglot-code-action-organize-imports)
 	      ("C-c r" . eglot-rename))
-  :hook ((rust-mode . eglot-ensure)))
+  :hook ((rust-mode . eglot-ensure)
+	 (haskell-mode . eglot-ensure)))
 
 (use-package flycheck
   :ensure t)
