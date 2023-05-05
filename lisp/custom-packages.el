@@ -236,7 +236,13 @@
   :defer t
   :ensure t
   :init
-  (setq org-roam-v2-ack t))
+  (setq org-roam-v2-ack t)
+  :bind (("C-c n f" . org-roam-node-find)
+	 ("C-c n i" . org-roam-node-insert)
+	 ("C-c n t" . org-roam-buffer-toggle))
+  :config
+  (setq org-roam-directory "~/notes/")
+  (org-roam-setup))
 
 (use-package org-bullets
   :ensure t
