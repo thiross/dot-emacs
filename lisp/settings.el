@@ -10,7 +10,7 @@
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family font-name
-		      :size 15.0
+		      :size 16.0
 		      :weight 'normal))
 	  ((eq system-type 'gnu/linux)
 	   (font-spec :family font-name
