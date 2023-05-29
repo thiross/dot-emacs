@@ -58,7 +58,7 @@
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+	doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-one t)
 
   ;; Enable flashing mode-line on errors
@@ -170,8 +170,12 @@
   ;; set prefix for lsp-command-keymap
   (setq lsp-keymap-prefix "C-c l")
   :config
-  (setq lsp-signature-auto-activate nil
-	lsp-signature-render-documentation nil)
+  (setq lsp-headerline-breadcrumb-enable nil
+	lsp-signature-auto-activate nil
+	lsp-signature-render-documentation nil
+	lsp-rust-analyzer-debug-lens-extra-dap-args
+	'(:MIMode lldb :miDebuggerPath lldb-mi
+		  :stopAtEntry :json-false :externalConsole :json-false))
   :hook
   ((rust-mode . lsp)
    (haskell-mode . lsp)
@@ -187,6 +191,25 @@
 (use-package lsp-ivy
   :ensure t
   :commands lsp-ivy-workspace-symbol)
+
+(use-package dap-mode
+  :ensure t
+  :config
+  (add-to-list 'image-types 'svg)
+
+  (require 'dap-cpptools)
+  (dap-ui-mode)
+
+  (dap-cpptools-setup)
+  (dap-register-debug-template
+   "Rust::GDB Run Configuration"
+   (list :type "cppdbg"
+	 :request "launch"
+	 :name "Cpptools::Run Configuration"
+	 :MIMode "lldb"
+	 :miDebuggerPath "lldb-mi"
+	 :program nil
+	 :cwd "${workspaceFolder}")))
 
 (use-package flycheck
   :ensure t
@@ -217,6 +240,10 @@
 (use-package elm-mode
   :ensure t
   :config)
+
+(use-package all-the-icons
+  :ensure t
+  :if (display-graphic-p))
 
 (use-package dhall-mode
   :ensure t

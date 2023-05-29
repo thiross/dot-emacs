@@ -5,12 +5,12 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'utf-8)
   (modify-coding-system-alist 'process "ghci" 'utf-8)
-  (let* ((font-name "Rec Mono Casual")
+  (let* ((font-name "SF Mono")
 	(en-font
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family font-name
-		      :size 16.0
+		      :size 18.0
 		      :weight 'normal))
 	  ((eq system-type 'gnu/linux)
 	   (font-spec :family font-name

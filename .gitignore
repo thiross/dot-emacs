@@ -13,3 +13,5 @@ server
 /bookmarks
 /tramp
 *.db
+/.extension/
+/.dap-breakpoints
