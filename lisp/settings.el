@@ -5,12 +5,12 @@
   (prefer-coding-system 'utf-8)
   (setq file-name-coding-system 'utf-8)
   (modify-coding-system-alist 'process "ghci" 'utf-8)
-  (let* ((font-name "SF Mono")
+  (let* ((font-name "Fira Code Retina")
 	(en-font
 	 (cond
 	  ((eq system-type 'darwin)
 	   (font-spec :family font-name
-		      :size 18.0
+		      :size 16.0
 		      :weight 'normal))
 	  ((eq system-type 'gnu/linux)
 	   (font-spec :family font-name
@@ -33,7 +33,7 @@
     (set-fontset-font t 'symbol zh-font)
     (set-fontset-font t 'cjk-misc zh-font)
     (set-fontset-font t 'bopomofo zh-font))
-  (setq-default line-spacing 0.3))
+  (setq-default line-spacing 0.2))
 
 (defun settings-gui ()
   ;; disable menu bar
