@@ -6,6 +6,10 @@
 (require 'package)
 (require 'use-package)
 
+(use-package auctex
+  :defer t
+  :ensure t)
+
 (use-package composite
   :defer t
   :init
@@ -164,52 +168,19 @@
   (define-fringe-bitmap
     'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
-(use-package lsp-mode
+(use-package eglot
   :ensure t
-  :init
-  ;; set prefix for lsp-command-keymap
-  (setq lsp-keymap-prefix "C-c l")
   :config
-  (setq lsp-headerline-breadcrumb-enable nil
-	lsp-signature-auto-activate nil
-	lsp-signature-render-documentation nil
-	lsp-rust-analyzer-debug-lens-extra-dap-args
-	'(:MIMode lldb :miDebuggerPath lldb-mi
-		  :stopAtEntry :json-false :externalConsole :json-false))
+  (setq eldoc-echo-area-use-multiline-p nil)
+  :bind
+  (:map eglot-mode-map
+	("C-c a" . eglot-code-actions)
+	("C-c h" . eldoc)
+	("C-c o" . eglot-code-action-organize-imports)
+	("C-c r" . eglot-rename))
   :hook
-  ((rust-mode . lsp)
-   (haskell-mode . lsp)
-   (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
-
-(use-package lsp-ui
-  :ensure t
-  :config
-  (setq lsp-ui-sideline-enable nil)
-  :commands lsp-ui-mode)
-
-(use-package lsp-ivy
-  :ensure t
-  :commands lsp-ivy-workspace-symbol)
-
-(use-package dap-mode
-  :ensure t
-  :config
-  (add-to-list 'image-types 'svg)
-
-  (require 'dap-cpptools)
-  (dap-ui-mode)
-
-  (dap-cpptools-setup)
-  (dap-register-debug-template
-   "Rust::GDB Run Configuration"
-   (list :type "cppdbg"
-	 :request "launch"
-	 :name "Cpptools::Run Configuration"
-	 :MIMode "lldb"
-	 :miDebuggerPath "lldb-mi"
-	 :program nil
-	 :cwd "${workspaceFolder}")))
+  ((rust-mode . eglot-ensure)
+   (haskell-mode . eglot-ensure)))
 
 (use-package flycheck
   :ensure t
@@ -251,10 +222,6 @@
   (setq
    dhall-format-arguments (\` ("--ascii"))
    dhall-use-header-line nil))
-
-(use-package auctex
-  :defer t
-  :ensure t)
 
 (use-package org-roam
   :defer t
