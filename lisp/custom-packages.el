@@ -6,6 +6,75 @@
 (require 'package)
 (require 'use-package)
 
+(defun my-open-line (n)
+  (interactive "p")
+  (if (= n 4)
+      (beginning-of-line)
+    (end-of-line))
+  (open-line 1)
+  (if (/= n 4)
+      (forward-line 1))
+  (funcall indent-line-function))
+
+(use-package emacs
+  :config
+  (let* ((font-name "SF Mono")
+	 (en (cond ((eq system-type 'darwin)
+		    (font-spec :family font-name
+			       :size 16.0
+			       :weight 'normal))
+		   ((eq system-type 'gnu/linux)
+		    (font-spec :family font-name
+			       :size 18.0
+			       :weight 'normal))
+		   (t
+		    (font-spec :family font-name
+			     :size 9.0)))))
+       (set-frame-font en))
+  (let* ((zh (cond ((eq system-type 'darwin)
+		    (font-spec :family "手札体-简"
+			       :size 16.0))
+		   (t
+		    (font-spec :family "微软雅黑"
+			       :size 12.0)))))
+    (set-fontset-font t 'han zh)
+    (set-fontset-font t 'symbol zh)
+    (set-fontset-font t 'cjk-misc zh)
+    (set-fontset-font t 'bopomofo zh))
+  (setq-default line-spacing 0.1)
+  (prefer-coding-system 'utf-8)
+  (modify-coding-system-alist 'process "ghci" 'utf-8)
+  (setq file-name-coding-system 'utf-8)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (show-paren-mode 1)
+  (transient-mark-mode -1)
+  (setq visible-bell nil)
+  (setq inhibit-startup-message t)
+  (setq enable-recursive-minibuffers t)
+  (if (display-graphic-p)
+      (progn
+	(setq initial-frame-alist
+	      '((width . 80)
+		(height . 30)))
+	(setq default-frame-alist
+	      '((width . 80)
+		(height . 30)))
+	))
+  (setq frame-title-format
+        '(buffer-file-name "%f"
+                           (dired-directory dired-directory "%b")))
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
+  (if (eq system-type 'darwin)
+      (setq default-directory "~/"))
+  (setq gc-cons-threshold (* 1024 1024 500))
+  (setq read-process-output-max (* 1024 1024))
+  :bind (("M-/" . hippie-expand)
+	 ("S-SPC" . set-mark-command)
+	 ("C-o" . my-open-line)))
+
 (use-package auctex
   :defer t
   :ensure t)

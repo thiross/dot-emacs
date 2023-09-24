@@ -35,9 +35,6 @@
   (if (file-exists-p user-config-file)
       (load-file user-config-file)))
 
-(require 'settings)
-(settings-set-all)
-
 (require 'custom-packages)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
