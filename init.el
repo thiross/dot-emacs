@@ -41,9 +41,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-export-backends '(ascii html icalendar latex md odt))
  '(package-selected-packages
-   '(all-the-icons project yaml-mode typescript-mode toml-mode solarized-theme powerline org-bullets magit lua-mode lsp-ui lsp-ivy json-mode haskell-mode groovy-mode glsl-mode dockerfile-mode counsel cmake-mode cargo auctex)))
+   '(org-bullets org-roam dhall-mode all-the-icons elm-mode typescript-mode toml-mode cargo rust-mode flycheck orderless corfu git-gutter-fringe git-gutter ormolu haskell-mode yaml-mode glsl-mode json-mode groovy-mode dockerfile-mode cmake-mode lua-mode counsel ivy which-key magit powerline doom-themes auctex)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

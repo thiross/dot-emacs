@@ -1,24 +1,13 @@
-;; set archives
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			 ("melpa" . "http://melpa.org/packages/")))
 
-;; libraries
 (require 'package)
+
 (require 'use-package)
 
-(defun my-open-line (n)
-  (interactive "p")
-  (if (= n 4)
-      (beginning-of-line)
-    (end-of-line))
-  (open-line 1)
-  (if (/= n 4)
-      (forward-line 1))
-  (funcall indent-line-function))
-
 (use-package emacs
-  :config
-  (let* ((font-name "SF Mono")
+  :init
+  (let* ((font-name "Fantasque Sans Mono")
 	 (en (cond ((eq system-type 'darwin)
 		    (font-spec :family font-name
 			       :size 16.0
@@ -70,10 +59,17 @@
   (if (eq system-type 'darwin)
       (setq default-directory "~/"))
   (setq gc-cons-threshold (* 1024 1024 500))
-  (setq read-process-output-max (* 1024 1024))
   :bind (("M-/" . hippie-expand)
 	 ("S-SPC" . set-mark-command)
-	 ("C-o" . my-open-line)))
+	 ("C-o" . (lambda (n)
+		    (interactive "p")
+		    (if (= n 4)
+			(beginning-of-line)
+		      (end-of-line))
+		    (open-line 1)
+		    (if (/= n 4)
+			(forward-line 1))
+		    (funcall indent-line-function)))))
 
 (use-package auctex
   :defer t
@@ -129,19 +125,14 @@
 (use-package doom-themes
   :ensure t
   :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-	doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
   (load-theme 'doom-one t)
 
-  ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (setq doom-themes-treemacs-theme "doom-atom")
   (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
 (use-package powerline
@@ -239,8 +230,10 @@
 
 (use-package eglot
   :ensure t
-  :config
-  (setq eldoc-echo-area-use-multiline-p nil)
+  :custom
+  (eldoc-echo-area-use-multiline-p nil)
+  (read-process-output-max (* 1024 1024))
+  (eglot-autoshutdown t)
   :bind
   (:map eglot-mode-map
 	("C-c a" . eglot-code-actions)
@@ -251,15 +244,58 @@
   ((rust-mode . eglot-ensure)
    (haskell-mode . eglot-ensure)))
 
+(use-package corfu
+  :ensure t
+  :custom
+  (tab-always-indent 'complete)
+  (completion-cycle-threshold nil)
+  (corfu-auto-prefix 3)
+  (corfu-auto-delay 0.25)
+  :init
+  (global-corfu-mode))
+
+(use-package cape
+  :ensure t
+  :bind (("C-c . p" . completion-at-point)
+	 ("C-c . t" . complete-tag)
+	 ("C-c . d" . cape-dabbrev)
+	 ("C-c . h" . cape-history)
+	 ("C-c . f" . cape-file)
+         ("C-c . k" . cape-keyword)
+         ("C-c . s" . cape-elisp-symbol)
+         ("C-c . e" . cape-elisp-block)
+         ("C-c . a" . cape-abbrev)
+         ("C-c . l" . cape-line)
+         ("C-c . w" . cape-dict)
+         ("C-c . :" . cape-emoji)
+         ("C-c . \\" . cape-tex)
+         ("C-c . _" . cape-tex)
+         ("C-c . ^" . cape-tex)
+         ("C-c . &" . cape-sgml)
+         ("C-c . r" . cape-rfc1345))
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block))
+
+(use-package orderless
+  :ensure t
+  :init
+  (setq completion-styles '(orderless basic)
+	completion-category-defaults nil
+	completion-category-overrides '((file styles partial-completion))))
+
+(use-package dabbrev
+  :ensure t
+  :bind (("M-/" . dabbrev-completion)
+	 ("C-M-/" . dabbrev-expand))
+  :custom
+  (dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
+
 (use-package flycheck
   :ensure t
   :config
   (setq flycheck-display-errors-function nil))
-
-(use-package company
-  :ensure t
-  :init
-  (global-company-mode))
 
 (use-package rust-mode
   :ensure t)
