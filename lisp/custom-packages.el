@@ -328,6 +328,20 @@
    dhall-format-arguments (\` ("--ascii"))
    dhall-use-header-line nil))
 
+(use-package org
+  :custom
+  (org-export-backends '(ascii html icalendar latex beamer md)))
+
+(use-package org-babel
+  :no-require t
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (haskell . t)
+     (latex . t)
+     (python . t))))
+
 (use-package org-roam
   :defer t
   :ensure t
