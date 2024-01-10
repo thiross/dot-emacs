@@ -7,10 +7,10 @@
 
 (use-package emacs
   :init
-  (let* ((font-name "Input")
+  (let* ((font-name "0xProto")
 	 (en (cond ((eq system-type 'darwin)
 		    (font-spec :family font-name
-			       :size 14.0
+			       :size 16
 			       :weight 'normal))
 		   ((eq system-type 'gnu/linux)
 		    (font-spec :family font-name
@@ -22,7 +22,7 @@
        (set-frame-font en))
   (let* ((zh (cond ((eq system-type 'darwin)
 		    (font-spec :family "手札体-简"
-			       :size 12.0))
+			       :size 15.0))
 		   (t
 		    (font-spec :family "微软雅黑"
 			       :size 12.0)))))
