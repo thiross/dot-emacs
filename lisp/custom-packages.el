@@ -71,10 +71,6 @@
 			(forward-line 1))
 		    (funcall indent-line-function)))))
 
-(use-package auctex
-  :defer t
-  :ensure t)
-
 (use-package composite
   :defer t
   :init
@@ -167,6 +163,14 @@
 	 ("<f10>" . counsel-ag))
   :config
   (setq counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s"))
+
+(use-package avy
+  :ensure t
+  :bind (("C-:" . avy-goto-char)))
+
+(use-package auctex
+  :defer t
+  :ensure t)
 
 (use-package lua-mode
   :ensure t
