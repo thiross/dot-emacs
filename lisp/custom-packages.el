@@ -10,7 +10,7 @@
   (let* ((font-name "0xProto")
 	 (en (cond ((eq system-type 'darwin)
 		    (font-spec :family font-name
-			       :size 16
+			       :size 14
 			       :weight 'normal))
 		   ((eq system-type 'gnu/linux)
 		    (font-spec :family font-name
@@ -58,18 +58,9 @@
   (setq auto-save-default nil)
   (if (eq system-type 'darwin)
       (setq default-directory "~/"))
-  (setq gc-cons-threshold (* 1024 1024 500))
-  :bind (("M-/" . hippie-expand)
-	 ("S-SPC" . set-mark-command)
-	 ("C-o" . (lambda (n)
-		    (interactive "p")
-		    (if (= n 4)
-			(beginning-of-line)
-		      (end-of-line))
-		    (open-line 1)
-		    (if (/= n 4)
-			(forward-line 1))
-		    (funcall indent-line-function)))))
+  (setq gc-cons-percentage 0.5
+	gc-cons-threshold (* 1024 1024 500))
+  :bind (("S-SPC" . set-mark-command)))
 
 (use-package composite
   :defer t
@@ -131,6 +122,10 @@
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
 
+(use-package crux
+  :ensure t
+  :bind (("C-o" . crux-smart-open-line)))
+
 (use-package powerline
   :ensure t
   :config
@@ -146,23 +141,24 @@
   :config
   (which-key-mode))
 
-(use-package ivy
+(use-package vertico
   :ensure t
-  :config
-  (setq ivy-display-style 'fancy)
-  (setq ivy-use-virtual-buffers t)
-  (ivy-mode 1))
+  :init
+  (vertico-mode))
 
-(use-package counsel
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  :bind (:map vertico-map
+	      ("RET" . vertico-directory-enter)
+	      ("DEL" . vertico-directory-delete-char)
+	      ("M-DEL" . vertico-directory-delete-word))
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+(use-package consult
   :ensure t
-  :bind (("C-x C-f" . counsel-find-file)
-	 ("M-x" . counsel-M-x)))
-
-(use-package swiper
-  :bind (("C-s" . swiper)
-	 ("<f10>" . counsel-ag))
-  :config
-  (setq counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s"))
+  :bind (("C-x b" . consult-buffer)
+	 ("M-y" . consult-yank-pop)))
 
 (use-package avy
   :ensure t
