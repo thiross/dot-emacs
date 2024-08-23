@@ -109,6 +109,16 @@
 			      `([,(cdr char-regexp) 0 font-shape-gstring]))))
     (set-char-table-parent composition-ligature-table composition-function-table)))
 
+(use-package time
+  :custom
+  (display-time-interval 60)
+  (display-time-mode t)
+  (display-time-use-mail-icon t))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :hook ((rust-mode . rainbow-delimiters-mode)))
+
 (use-package doom-themes
   :ensure t
   :config

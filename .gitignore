@@ -16,3 +16,4 @@ server
 /.extension/
 /.dap-breakpoints
 /.cache/
+/eln-cache/
