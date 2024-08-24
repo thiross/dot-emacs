@@ -308,7 +308,8 @@
   (setq flycheck-display-errors-function nil))
 
 (use-package rust-mode
-  :ensure t)
+  :ensure t
+  :hook (rust-mode . (lambda () (setq indent-tab-mode nil))))
 
 (use-package cargo
   :ensure t
