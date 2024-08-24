@@ -109,12 +109,6 @@
 			      `([,(cdr char-regexp) 0 font-shape-gstring]))))
     (set-char-table-parent composition-ligature-table composition-function-table)))
 
-(use-package time
-  :custom
-  (display-time-interval 60)
-  (display-time-mode t)
-  (display-time-use-mail-icon t))
-
 (use-package rainbow-delimiters
   :ensure t
   :hook ((rust-mode . rainbow-delimiters-mode)))
@@ -141,6 +135,30 @@
   :config
   (powerline-default-theme))
 
+(use-package time
+  :custom
+  (display-time-interval 60)
+  (display-time-mode t)
+  (display-time-use-mail-icon t))
+
+(use-package diminish
+  :ensure t)
+
+(use-package align
+  :commands align
+  :bind (("M-[" . align-code)
+	 ("C-c [" . align-regexp))
+  :custom
+  (align-to-tab-stop nil)
+  :preface
+  (defun align-code (beg end &optional arg)
+    (interactive "rP")
+    (if (null arg)
+	(align beg end)
+      (let ((end-mark (copy-marker end))
+	    (indent-region beg end-mark nil)
+	    (align beg end-mark))))))
+
 (use-package magit
   :ensure t
   :config
@@ -148,6 +166,7 @@
 
 (use-package which-key
   :ensure t
+  :diminish
   :config
   (which-key-mode))
 
