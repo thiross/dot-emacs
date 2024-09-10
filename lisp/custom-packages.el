@@ -328,7 +328,7 @@
 
 (use-package rust-mode
   :ensure t
-  :hook (rust-mode . (lambda () (setq indent-tab-mode nil))))
+  :hook (rust-mode . (lambda () (setq indent-tabs-mode nil))))
 
 (use-package cargo
   :ensure t
