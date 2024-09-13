@@ -28,7 +28,6 @@
 	   (export-exec-path-to-env)))
 
 (add-sub-under-user-directory "lisp")
-(add-sub-under-user-directory "lisp/use-package")
 
 (let ((user-config-file (expand-file-name "user.el"
 					  user-emacs-directory)))
