@@ -23,9 +23,12 @@
   (let* ((zh (cond ((eq system-type 'darwin)
 		    (font-spec :family "手札体-简"
 			       :size 15.0))
+		   ((eq system-type 'gnu/linux)
+		    (font-spec :family "手札体-简"
+			       :size 16.0))
 		   (t
 		    (font-spec :family "微软雅黑"
-			       :size 12.0)))))
+			       :size 8.0)))))
     (set-fontset-font t 'han zh)
     (set-fontset-font t 'symbol zh)
     (set-fontset-font t 'cjk-misc zh)
