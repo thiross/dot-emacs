@@ -260,21 +260,33 @@
   (define-fringe-bitmap
     'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
-(use-package eglot
+(use-package lsp-mode
   :ensure t
   :custom
-  (eldoc-echo-area-use-multiline-p nil)
-  (read-process-output-max (* 1024 1024))
-  (eglot-autoshutdown t)
-  :bind
-  (:map eglot-mode-map
-	("C-c a" . eglot-code-actions)
-	("C-c h" . eldoc)
-	("C-c o" . eglot-code-action-organize-imports)
-	("C-c r" . eglot-rename))
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
+  (lsp-eldoc-render-all t)
+  (lsp-idle-delay 0.6)
+  (lsp-inlay-hint-enable t)
+
+  ;; rust mode
+  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+  (lsp-rust-analyzer-display-chaining-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+  (lsp-rust-analyzer-display-closure-return-type-hints t)
+  (lsp-rust-analyzer-display-parameter-hints nil)
+  (lsp-rust-analyzer-display-reborrow-hints nil)
+  :commands lsp
   :hook
-  ((rust-mode . eglot-ensure)
-   (haskell-mode . eglot-ensure)))
+  ((lsp-mode-hook . lsp-ui-mode)
+   (rust-mode . lsp)))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-peek-always-show t)
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-doc-enable nil))
 
 (use-package corfu
   :ensure t
