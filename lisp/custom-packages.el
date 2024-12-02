@@ -260,21 +260,18 @@
   (define-fringe-bitmap
     'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
-(use-package eglot
+(use-package lsp-mode
   :ensure t
   :custom
-  (eldoc-echo-area-use-multiline-p nil)
-  (read-process-output-max (* 1024 1024))
-  (eglot-autoshutdown t)
-  :bind
-  (:map eglot-mode-map
-	("C-c a" . eglot-code-actions)
-	("C-c h" . eldoc)
-	("C-c o" . eglot-code-action-organize-imports)
-	("C-c r" . eglot-rename))
+  (lsp-completion-provider :none)
+  (lsp-headerline-breadcrumb-enable nil)
+  :commands lsp
   :hook
-  ((rust-mode . eglot-ensure)
-   (haskell-mode . eglot-ensure)))
+  ((rust-mode . lsp)))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
 
 (use-package corfu
   :ensure t
