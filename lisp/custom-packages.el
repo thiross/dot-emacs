@@ -264,6 +264,7 @@
   :ensure t
   :custom
   (lsp-completion-provider :none)
+  (lsp-inlay-hint-enable t)
   (lsp-headerline-breadcrumb-enable nil)
   :commands lsp
   :hook
