@@ -24,7 +24,7 @@
 		    (font-spec :family "手札体-简"
 			       :size 15.0))
 		   ((eq system-type 'gnu/linux)
-		    (font-spec :family "手札体-简"
+		    (font-spec :family "微软雅黑"
 			       :size 16.0))
 		   (t
 		    (font-spec :family "微软雅黑"
@@ -63,6 +63,7 @@
       (setq default-directory "~/"))
   (setq gc-cons-percentage 0.5
 	gc-cons-threshold (* 1024 1024 500))
+  :diminish eldoc-mode
   :bind (("S-SPC" . set-mark-command)))
 
 (use-package composite
