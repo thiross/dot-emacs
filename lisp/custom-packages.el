@@ -246,6 +246,7 @@
 
 (use-package git-gutter
   :ensure t
+  :diminish git-gutter-mode
   :hook ((haskell-mode . git-gutter-mode)
 	 (rust-mode . git-gutter-mode))
   :config
