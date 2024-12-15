@@ -269,6 +269,10 @@
   (lsp-inlay-hint-enable t)
   (lsp-headerline-breadcrumb-enable nil)
   :commands lsp
+  :bind
+  (("C-c a a" . lsp-execute-code-action)
+   ("C-c a r" . lsp-rename)
+   ("C-c a o" . lsp-organize-imports))
   :hook
   ((rust-mode . lsp)))
 
