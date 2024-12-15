@@ -268,17 +268,23 @@
   (lsp-completion-provider :none)
   (lsp-inlay-hint-enable t)
   (lsp-headerline-breadcrumb-enable nil)
+  (lsp-ui-sideline-enable nil)
   :commands lsp
   :bind
   (("C-c a a" . lsp-execute-code-action)
    ("C-c a r" . lsp-rename)
-   ("C-c a o" . lsp-organize-imports))
+   ("C-c a o" . lsp-organize-imports)
+   ("C-c d d" . lsp-describe-thing-at-point)
+   ("C-c g d" . xref-find-definitions)
+   ("C-c g r" . xref-find-references))
   :hook
   ((rust-mode . lsp)))
 
 (use-package lsp-ui
   :ensure t
-  :commands lsp-ui-mode)
+  :commands lsp-ui-mode
+  :bind
+  (("C-c g o" . lsp-ui-imenu)))
 
 (use-package corfu
   :ensure t
