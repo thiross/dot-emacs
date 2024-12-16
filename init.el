@@ -4,6 +4,8 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+(setenv "LSP_USE_PLISTS" "true")
+
 ;; add subdirectories to load-path
 (defun add-sub-under-user-directory (path)
   (add-to-list 'load-path

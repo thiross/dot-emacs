@@ -61,7 +61,8 @@
   (setq auto-save-default nil)
   (if (eq system-type 'darwin)
       (setq default-directory "~/"))
-  (setq gc-cons-percentage 0.5
+  (setq read-process-output-max (* 1024 1024)
+	gc-cons-percentage 0.5
 	gc-cons-threshold (* 1024 1024 500))
   :diminish eldoc-mode
   :bind (("S-SPC" . set-mark-command)))
@@ -326,6 +327,9 @@
   (setq completion-styles '(orderless basic)
 	completion-category-defaults nil
 	completion-category-overrides '((file styles partial-completion))))
+
+(use-package yasnippet
+  :ensure t)
 
 (use-package dabbrev
   :ensure t
