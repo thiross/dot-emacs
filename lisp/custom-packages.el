@@ -263,29 +263,19 @@
   (define-fringe-bitmap
     'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
-(use-package lsp-mode
+(use-package eglot
   :ensure t
   :custom
-  (lsp-completion-provider :none)
-  (lsp-inlay-hint-enable t)
-  (lsp-headerline-breadcrumb-enable nil)
-  (lsp-ui-sideline-enable nil)
-  :commands lsp
+  (eldoc-echo-area-use-multiline-p nil)
+  (eglot-autoshutdown t)
   :bind
-  (("C-c a a" . lsp-execute-code-action)
-   ("C-c a r" . lsp-rename)
-   ("C-c a o" . lsp-organize-imports)
-   ("C-c d d" . lsp-describe-thing-at-point)
-   ("C-c g d" . xref-find-definitions)
-   ("C-c g r" . xref-find-references))
-  :hook
-  ((rust-mode . lsp)))
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode
-  :bind
-  (("C-c g o" . lsp-ui-imenu)))
+  (:map eglot-mode-map
+	("C-c a a" . eglot-code-actions)
+	("C-c a o" . eglot-code-action-organize-imports)
+	("C-c a r" . eglot-rename)
+	("C-c h"   . eldoc))
+  ((rust-mode . eglot-ensure)
+   (haskell-mode . eglot-ensure)))
 
 (use-package corfu
   :ensure t
