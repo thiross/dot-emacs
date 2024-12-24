@@ -274,6 +274,7 @@
 	("C-c a o" . eglot-code-action-organize-imports)
 	("C-c a r" . eglot-rename)
 	("C-c h"   . eldoc))
+  :hook
   ((rust-mode . eglot-ensure)
    (haskell-mode . eglot-ensure)))
 
@@ -319,7 +320,9 @@
 	completion-category-overrides '((file styles partial-completion))))
 
 (use-package yasnippet
-  :ensure t)
+  :ensure t
+  :hook
+  ((rust-mode . yas-minor-mode)))
 
 (use-package dabbrev
   :ensure t
@@ -331,7 +334,9 @@
 (use-package flycheck
   :ensure t
   :config
-  (setq flycheck-display-errors-function nil))
+  (setq flycheck-display-errors-function nil)
+  :hook
+  ((after-init-hook . global-flycheck-mode)))
 
 (use-package rust-mode
   :ensure t
