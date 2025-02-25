@@ -7,7 +7,7 @@
 
 (use-package emacs
   :init
-  (let* ((font-name "0xProto")
+  (let* ((font-name "Maple Mono")
 	 (en (cond ((eq system-type 'darwin)
 		    (font-spec :family font-name
 			       :size 14
