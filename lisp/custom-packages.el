@@ -278,6 +278,13 @@
   ((rust-mode . eglot-ensure)
    (haskell-mode . eglot-ensure)))
 
+(use-package eglot-x
+  :vc (:url "https://github.com/nemethf/eglot-x.git"
+	    :rev :newest)
+  :after eglot
+  :config
+  (eglot-x-setup))
+
 (use-package corfu
   :ensure t
   :custom
