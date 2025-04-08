@@ -224,6 +224,14 @@
 (use-package glsl-mode
   :ensure t)
 
+(use-package wgsl-mode
+  :ensure t
+  :hook
+  ((wgsl-mode
+    . (lambda ()
+	(c-set-offset 'arglist-intro '+)
+	(c-set-offset 'arglist-close 0)))))
+
 (use-package yaml-mode
   :ensure t)
 
@@ -275,15 +283,8 @@
 	("C-c a r" . eglot-rename)
 	("C-c h"   . eldoc))
   :hook
-  ((rust-mode . eglot-ensure)
-   (haskell-mode . eglot-ensure)))
-
-(use-package eglot-x
-  :vc (:url "https://github.com/nemethf/eglot-x.git"
-	    :rev :newest)
-  :after eglot
-  :config
-  (eglot-x-setup))
+  (((rust-mode haskell-mode)
+    . eglot-ensure)))
 
 (use-package corfu
   :ensure t
@@ -341,9 +342,7 @@
 (use-package flycheck
   :ensure t
   :config
-  (setq flycheck-display-errors-function nil)
-  :hook
-  ((after-init-hook . global-flycheck-mode)))
+  (setq flycheck-display-errors-function nil))
 
 (use-package rust-mode
   :ensure t

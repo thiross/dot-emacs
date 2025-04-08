@@ -17,3 +17,4 @@ server
 /.dap-breakpoints
 /.cache/
 /eln-cache/
+/tree-sitter/
