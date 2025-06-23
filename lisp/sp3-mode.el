@@ -7,7 +7,7 @@
   (let ((keywords '("var" "function" "if" "for" "end"))
 	(types '()))
     `(((,(rx-to-string `(: (or ,@keywords))) 0 font-lock-keyword-face)
-       ))))
+       (,(rx-to-string `(: (+ word) ":")) 0 font-lock-constant-face)))))
 
 (defvar sp3-mode-syntax-table
   (let ((st (make-syntax-table)))
