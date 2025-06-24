@@ -17,27 +17,41 @@
 
 (defun sp3--current-indentation ()
   (let ((done nil)
-	(indent (current-indentation))
-	token)
+	(indent (current-indentation)))
     (save-excursion
       (while (not done)
 	(if (= (forward-line -1) -1)
 	    (setq done t)
 	  (back-to-indentation)
-	  (setq token (thing-at-point 'symbol t))
-	  (cond ((string= token "function")
-		 (setq indent (+ (current-indentation) tab-width))
-		 (setq done t))))))
+	  (pcase (thing-at-point 'symbol t)
+	    (or "function" "for" "if"
+		(setq indent (+ (current-indentation) tab-width))
+		(setq done t))))))
     (save-excursion
       (back-to-indentation)
-      (when (string= (thing-at-point 'symbol t) "end")
-	(setq indent (max (- indent tab-width) 0)))
+      (pcase (thing-at-point 'symbol t)
+	("end"
+	 (setq indent (- indent tab-width)))))
     indent))
+
+(defun sp3--indent-to (column)
+  (let ((old-column (current-column))
+	new-column)
+    (save-excursion
+      (back-to-indentation)
+      (let ((col (current-column)))
+	(if (>= column col)
+	    (indent-to column)
+	  (delete-char (- column col))))
+      (setq new-column (current-column)))
+    (if (< old-column new-column)
+	(back-to-indentation))))
 
 (defun sp3-indent-line ()
   "Indent current line."
   (let ((indent (sp3--current-indentation)))
-    (indent-to indent)))
+    (princ (format "Indent to : %d" indent))
+    (sp3--indent-to indent)))
 
 ;;;###autoload
 (define-derived-mode sp3-mode prog-mode "sp3"
