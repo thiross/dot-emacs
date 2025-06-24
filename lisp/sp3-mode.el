@@ -1,5 +1,4 @@
 ;;; sp3-mode.el --- major mode for sp3
-
 (eval-when-compile
   (require 'rx))
 
@@ -16,18 +15,37 @@
     (modify-syntax-entry ?\n ">" st)
     st))
 
+(defun sp3--current-indentation ()
+  (let ((done nil)
+	(indent (current-indentation))
+	token)
+    (save-excursion
+      (while (not done)
+	(if (= (forward-line -1) -1)
+	    (setq done t)
+	  (back-to-indentation)
+	  (setq token (thing-at-point 'symbol t))
+	  (cond ((string= token "function")
+		 (setq indent (+ (current-indentation) tab-width))
+		 (setq done t))))))
+    (save-excursion
+      (back-to-indentation)
+      (when (string= (thing-at-point 'symbol t) "end")
+	(setq indent (max (- indent tab-width) 0)))
+    indent))
+
 (defun sp3-indent-line ()
   "Indent current line."
-  )
+  (let ((indent (sp3--current-indentation)))
+    (indent-to indent)))
 
 ;;;###autoload
 (define-derived-mode sp3-mode prog-mode "sp3"
   "Major mode for sp3 files."
   (setq font-lock-defaults sp3--font-lock-defaults)
-  (setq comment-start "#")
-  (setq comment-end "")
   (setq-local indent-line-function #'sp3-indent-line)
-  (setq-local indent-tabs-mode nil))
+  (setq-local indent-tabs-mode nil)
+  (setq-local tab-width 2))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.sp3" . sp3-mode))
