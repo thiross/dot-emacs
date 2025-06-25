@@ -3,16 +3,17 @@
   (require 'rx))
 
 (defconst sp3--font-lock-defaults
-  (let ((keywords '("var" "function" "if" "for" "end"))
+  (let ((keywords '("else" "elsif" "end" "for" "function" "if" "shader" "var"))
 	(types '()))
-    `(((,(rx-to-string `(: (or ,@keywords))) 0 font-lock-keyword-face)
-       (,(rx-to-string `(: (+ word) ":")) 0 font-lock-constant-face)))))
+    `(((,(rx-to-string `(: symbol-start (or ,@keywords) symbol-end)) 0 font-lock-keyword-face)
+       (,(rx-to-string '(: bol (* space) (+ word) (* space) ":" (* space) eol)) 0 font-lock-constant-face)))))
 
 (defvar sp3-mode-syntax-table
   (let ((st (make-syntax-table)))
     (modify-syntax-entry ?/ ". 124" st)
     (modify-syntax-entry ?* ". 23b" st)
     (modify-syntax-entry ?\n ">" st)
+    (modify-syntax-entry ?_ "w" st)
     st))
 
 (defun sp3--current-indentation ()
@@ -24,14 +25,22 @@
 	    (setq done t)
 	  (back-to-indentation)
 	  (pcase (thing-at-point 'symbol t)
-	    (or "function" "for" "if"
-		(setq indent (+ (current-indentation) tab-width))
-		(setq done t))))))
+	    ((or "function" "for" "if")
+	     (setq indent (+ (current-indentation) tab-width))
+	     (setq done t))
+	    ((pred (lambda (_)
+	       (string-match (rx-to-string '(: bol (* space) (+ word) (* space) ":" (* space) eol)) (thing-at-point 'line t))) nil))
+	    (token (when token
+		     (setq indent (current-indentation))
+		     (setq done t)))))))
     (save-excursion
       (back-to-indentation)
-      (pcase (thing-at-point 'symbol t)
-	("end"
-	 (setq indent (- indent tab-width)))))
+      (pcase (thing-at-point 'line t)
+	((rx (: bol (* space) "end" (* space) eol))
+	 (setq indent (- indent tab-width)))
+	((rx (: bol (* space) (+ word) (* space) ":" (* space) eol))
+	 (setq indent 0))
+	))
     indent))
 
 (defun sp3--indent-to (column)
@@ -50,7 +59,6 @@
 (defun sp3-indent-line ()
   "Indent current line."
   (let ((indent (sp3--current-indentation)))
-    (princ (format "Indent to : %d" indent))
     (sp3--indent-to indent)))
 
 ;;;###autoload
