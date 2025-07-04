@@ -27,6 +27,7 @@
     (progn (add-executable-path "~/.local/bin")
 	   (add-executable-path "~/.cargo/bin")
 	   (add-executable-path "/usr/local/bin")
+	   (add-executable-path "/opt/homebrew/bin")
 	   (export-exec-path-to-env)))
 
 (add-sub-under-user-directory "lisp")
