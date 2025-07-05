@@ -378,6 +378,7 @@
 
 (use-package org
   :custom
+  (org-latex-compiler "xelatex")
   (org-export-backends '(ascii html icalendar latex beamer md)))
 
 (use-package org-babel
