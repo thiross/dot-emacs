@@ -29,7 +29,7 @@
 	       (setq done t)
 	     (back-to-indentation)
 	     (pcase (thing-at-point 'symbol t)
-	       ((or "function" "for" "if" "elsif" "else")
+	       ((or "function" "for" "if" "elsif" "else" "shader")
 		(setq indent (+ (current-indentation) tab-width))
 		(setq done t))
 	       ((pred (lambda (_)
