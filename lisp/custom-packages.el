@@ -202,6 +202,10 @@
   :defer t
   :ensure t)
 
+(use-package cc-mode
+  :hook (((c++-mode c-mode) .
+	  (lambda () (setq indent-tabs-mode nil c-basic-offset 4)))))
+
 (use-package lua-mode
   :ensure t
   :config
