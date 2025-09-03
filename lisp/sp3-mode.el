@@ -17,6 +17,7 @@
     (modify-syntax-entry ?* ". 23b" st)
     (modify-syntax-entry ?\n ">" st)
     (modify-syntax-entry ?_ "w" st)
+    (modify-syntax-entry ?- "." st)
     st))
 
 (defmacro sp3--current-indentation ()
