@@ -6,7 +6,7 @@
   '(: bol (* space) (+ word) (* space) (? (: "["  (* space) (+ word) (* space) "]" (* space))) ":" (* space) eol))
 
 (defconst sp3--font-lock-defaults
-  (let ((keywords '("else" "elsif" "end" "for" "function" "if" "shader" "var"))
+  (let ((keywords '("else" "elsif" "end" "for" "function" "if" "shader" "var" "return" "while" "until" "repeat"))
 	(types '()))
     `(((,(rx-to-string `(: symbol-start (or ,@keywords) symbol-end)) 0 font-lock-keyword-face)
        (,(rx-to-string sp3--rx-label) 0 font-lock-constant-face)))))
@@ -21,7 +21,7 @@
     st))
 
 (defmacro sp3--current-indentation ()
-  (let ((keywords '("else" "elsif" "end")))
+  (let ((keywords '("else" "elsif" "end" "until")))
     `(let ((done nil)
 	   (indent (current-indentation)))
        (save-excursion
@@ -30,7 +30,7 @@
 	       (setq done t)
 	     (back-to-indentation)
 	     (pcase (thing-at-point 'symbol t)
-	       ((or "function" "for" "if" "elsif" "else" "shader")
+	       ((or "function" "for" "if" "elsif" "else" "shader" "while" "repeat")
 		(setq indent (+ (current-indentation) tab-width))
 		(setq done t))
 	       ((pred (lambda (_)
