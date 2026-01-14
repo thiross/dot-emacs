@@ -175,10 +175,25 @@
   :config
   (which-key-mode))
 
+(use-package multiple-cursors
+  :ensure t
+  :diminish
+  :bind
+  ("C->" . mc/mark-next-like-this)
+  ("C-<" . mc/mark-previous-like-this)
+  ("C-c C-<". mc/mark-all-like-this))
+
 (use-package vertico
   :ensure t
   :init
   (vertico-mode))
+
+(use-package marginalia
+  :ensure t
+  :bind (:map minibuffer-local-map
+	      ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
 
 (use-package vertico-directory
   :after vertico
@@ -261,7 +276,8 @@
   :ensure t
   :diminish git-gutter-mode
   :hook ((haskell-mode . git-gutter-mode)
-	 (rust-mode . git-gutter-mode))
+	 (rust-mode . git-gutter-mode)
+	 (sp3-mode . git-gutter-mode))
   :config
   (setq git-gutter:update-interval 0.02))
 
