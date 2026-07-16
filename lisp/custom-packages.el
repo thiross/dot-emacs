@@ -364,8 +364,13 @@
   :config
   (setq flycheck-display-errors-function nil))
 
-(use-package rust-mode
+(use-package rustic
   :ensure t
+  :custom
+  (rustic-lsp-client 'eglot)
+  (rustic-rustfmt-bin "rustfmt")
+  (rustic-rustfmt-args "+nightly")
+  :bind (("C-c C-f" . rustic-format-buffer))
   :hook (rust-mode . (lambda () (setq indent-tabs-mode nil))))
 
 (use-package cargo
