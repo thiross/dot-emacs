@@ -10,7 +10,7 @@
   (let* ((font-name "Maple Mono")
 	 (en (cond ((eq system-type 'darwin)
 		    (font-spec :family font-name
-			       :size 14
+			       :size 15
 			       :weight 'normal))
 		   ((eq system-type 'gnu/linux)
 		    (font-spec :family font-name
