@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			 ("melpa" . "http://melpa.org/packages/")))
 
@@ -372,10 +373,6 @@
   (rustic-rustfmt-args "+nightly")
   :bind (("C-c C-f" . rustic-format-buffer))
   :hook (rust-mode . (lambda () (setq indent-tabs-mode nil))))
-
-(use-package cargo
-  :ensure t
-  :hook (rust-mode . cargo-minor-mode))
 
 (use-package toml-mode
   :ensure t)

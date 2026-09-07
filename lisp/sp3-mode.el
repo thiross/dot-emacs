@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;;; sp3-mode.el --- major mode for sp3
 (eval-when-compile
   (require 'rx))
