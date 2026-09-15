@@ -351,7 +351,7 @@
 (use-package yasnippet
   :ensure t
   :hook
-  ((rust-mode . yas-minor-mode)))
+  ((prog-mode . yas-minor-mode)))
 
 (use-package dabbrev
   :ensure t
@@ -359,11 +359,6 @@
 	 ("C-M-/" . dabbrev-expand))
   :custom
   (dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
-
-(use-package flycheck
-  :ensure t
-  :config
-  (setq flycheck-display-errors-function nil))
 
 (use-package rustic
   :ensure t
