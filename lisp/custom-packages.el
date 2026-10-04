@@ -117,7 +117,7 @@
 
 (use-package rainbow-delimiters
   :ensure t
-  :hook ((rust-mode . rainbow-delimiters-mode)))
+  :hook ((rustic-mode . rainbow-delimiters-mode)))
 
 (use-package doom-themes
   :ensure t
@@ -306,6 +306,59 @@
   :hook
   (((rust-mode haskell-mode)
     . eglot-ensure)))
+
+(use-package dape
+  :ensure t
+  :hook
+  (rustic-mode . my/dape-rust-example-setup)
+  :config
+  (defun my/dape-rust-examples (root)
+     (let* ((default-directory root)
+         (json (shell-command-to-string
+                "cargo metadata --no-deps --format-version 1"))
+         (data (json-parse-string json
+                                  :object-type 'alist
+                                  :array-type 'list
+                                  :null-object nil
+                                  :false-object nil))
+         (packages (alist-get 'packages data))
+         (target-dir (alist-get 'target_directory data))
+         (examples
+          (cl-loop for pkg in packages
+                   append (cl-loop for ex in (alist-get 'targets pkg)
+                                   when (member "example" (alist-get 'kind ex))
+                                   collect (cons (alist-get 'name ex)
+                                                 (alist-get 'src_path ex))))))
+    (cons target-dir examples)))
+  (defun my/dape-rust-example-setup ()
+    (interactive)
+    (when-let* ((root (locate-dominating-file default-directory "Cargo.toml")))
+    (let* ((info (my/dape-rust-examples root))
+           (target-dir (car info))
+           (examples (cdr info)))
+      (dolist (pair examples)
+        (let* ((exe-name (car pair))
+               (prog (expand-file-name
+                      (concat "debug/examples/" exe-name) target-dir))
+               (sym (intern (concat "rust-example-" exe-name)))
+               (display (symbol-name sym)))
+          (unless (assoc sym dape-configs)
+            (add-to-list
+             'dape-configs
+             `(,sym
+               modes (rustic-mode)
+               command "lldb-dap"
+               command-cwd ,target-dir
+	       ensure (lambda (config)
+			(unless (file-exists-p ,prog)
+			  (user-error "Run: cargo build --example %s" ,exe-name)))
+               :type "lldb-dap"
+               :request "launch"
+               :name ,display
+               :program ,prog
+               :cwd ,(file-truename root)
+               :args []
+	       :runInTerminal t)))))))))
 
 (use-package corfu
   :ensure t
