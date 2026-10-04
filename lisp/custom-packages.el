@@ -357,8 +357,7 @@
                :name ,display
                :program ,prog
                :cwd ,(file-truename root)
-               :args []
-	       :runInTerminal t)))))))))
+               :args [])))))))))
 
 (use-package corfu
   :ensure t
