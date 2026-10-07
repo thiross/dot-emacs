@@ -56,8 +56,8 @@
 		(height . 30)))
 	))
   (setq frame-title-format
-        '(buffer-file-name "%f"
-                           (dired-directory dired-directory "%b")))
+	'(buffer-file-name "%f"
+			   (dired-directory dired-directory "%b")))
   (setq make-backup-files nil)
   (setq auto-save-default nil)
   (if (eq system-type 'darwin)
@@ -66,7 +66,10 @@
 	gc-cons-percentage 0.5
 	gc-cons-threshold (* 1024 1024 500))
   :diminish eldoc-mode
-  :bind (("S-SPC" . set-mark-command)))
+  :bind
+  (("S-SPC" . set-mark-command)
+   ("<home>" . move-beginning-of-line)
+   ("<end>" . move-end-of-line)))
 
 (use-package composite
   :defer t
@@ -312,52 +315,68 @@
   :hook
   (rustic-mode . my/dape-rust-example-setup)
   :config
+  (defun my/dape-lldb-dap-path ()
+    (or (executable-find "lldb-dap")
+	(and (executable-find "xcrun")
+	     (string-trim
+	      (shell-command-to-string "xcrun -f lldb-dap")))))
+  (add-to-list 'dape-configs
+	       `(lldb-dap-attach
+		 modes (prog-mode)
+		 command ,(my/dape-lldb-dap-path)
+		 fn (lambda (cfg)
+		      (plist-put cfg :pid (read-number "PID to attach: ")))
+		 :type "lldb-dap"
+		 :request "attach"))
   (defun my/dape-rust-examples (root)
-     (let* ((default-directory root)
-         (json (shell-command-to-string
-                "cargo metadata --no-deps --format-version 1"))
-         (data (json-parse-string json
-                                  :object-type 'alist
-                                  :array-type 'list
-                                  :null-object nil
-                                  :false-object nil))
-         (packages (alist-get 'packages data))
-         (target-dir (alist-get 'target_directory data))
-         (examples
-          (cl-loop for pkg in packages
-                   append (cl-loop for ex in (alist-get 'targets pkg)
-                                   when (member "example" (alist-get 'kind ex))
-                                   collect (cons (alist-get 'name ex)
-                                                 (alist-get 'src_path ex))))))
+    (let* ((default-directory root)
+	   (json (shell-command-to-string
+		  (concat (shell-quote-argument (executable-find "cargo"))
+			  " metadata --no-deps --format-version 1")))
+	   (data (json-parse-string json
+				    :object-type 'alist
+				    :array-type 'list
+				    :null-object nil
+				    :false-object nil))
+	   (packages (alist-get 'packages data))
+	   (target-dir (alist-get 'target_directory data))
+	   (examples
+	    (cl-loop for pkg in packages
+		     append (cl-loop for ex in (alist-get 'targets pkg)
+				     when (member "example" (alist-get 'kind ex))
+				     collect (cons (alist-get 'name ex)
+						   (alist-get 'src_path ex))))))
     (cons target-dir examples)))
   (defun my/dape-rust-example-setup ()
     (interactive)
     (when-let* ((root (locate-dominating-file default-directory "Cargo.toml")))
-    (let* ((info (my/dape-rust-examples root))
-           (target-dir (car info))
-           (examples (cdr info)))
-      (dolist (pair examples)
-        (let* ((exe-name (car pair))
-               (prog (expand-file-name
-                      (concat "debug/examples/" exe-name) target-dir))
-               (sym (intern (concat "rust-example-" exe-name)))
-               (display (symbol-name sym)))
-          (unless (assoc sym dape-configs)
-            (add-to-list
-             'dape-configs
-             `(,sym
-               modes (rustic-mode)
-               command "lldb-dap"
-               command-cwd ,target-dir
-	       ensure (lambda (config)
-			(unless (file-exists-p ,prog)
-			  (user-error "Run: cargo build --example %s" ,exe-name)))
-               :type "lldb-dap"
-               :request "launch"
-               :name ,display
-               :program ,prog
-               :cwd ,(file-truename root)
-               :args [])))))))))
+      (let* ((lldb-dap (my/dape-lldb-dap-path))
+	     (info (my/dape-rust-examples root))
+	     (target-dir (car info))
+	     (examples (cdr info)))
+	(dolist (pair examples)
+	  (let* ((exe-name (car pair))
+		 (prog (expand-file-name
+			(concat "debug/examples/" exe-name) target-dir))
+		 (sym (intern (concat "rust-example-" exe-name)))
+		 (display (symbol-name sym)))
+	    (unless (assoc sym dape-configs)
+	      (add-to-list
+	       'dape-configs
+	       `(,sym
+		 modes (rustic-mode)
+		 command ,lldb-dap
+		 command-cwd ,target-dir
+		 ensure (lambda (config)
+			  (unless (file-exists-p ,prog)
+			    (user-error "Run: cargo build --example %s" ,exe-name)))
+		 :type "lldb-dap"
+		 :request "launch"
+		 :name ,display
+		 :program ,prog
+		 :console "externalTerminal"
+		 :cwd ,(file-truename root)
+		 :args [])))))))))
 
 (use-package corfu
   :ensure t
@@ -376,18 +395,18 @@
 	 ("C-c . d" . cape-dabbrev)
 	 ("C-c . h" . cape-history)
 	 ("C-c . f" . cape-file)
-         ("C-c . k" . cape-keyword)
-         ("C-c . s" . cape-elisp-symbol)
-         ("C-c . e" . cape-elisp-block)
-         ("C-c . a" . cape-abbrev)
-         ("C-c . l" . cape-line)
-         ("C-c . w" . cape-dict)
-         ("C-c . :" . cape-emoji)
-         ("C-c . \\" . cape-tex)
-         ("C-c . _" . cape-tex)
-         ("C-c . ^" . cape-tex)
-         ("C-c . &" . cape-sgml)
-         ("C-c . r" . cape-rfc1345))
+	 ("C-c . k" . cape-keyword)
+	 ("C-c . s" . cape-elisp-symbol)
+	 ("C-c . e" . cape-elisp-block)
+	 ("C-c . a" . cape-abbrev)
+	 ("C-c . l" . cape-line)
+	 ("C-c . w" . cape-dict)
+	 ("C-c . :" . cape-emoji)
+	 ("C-c . \\" . cape-tex)
+	 ("C-c . _" . cape-tex)
+	 ("C-c . ^" . cape-tex)
+	 ("C-c . &" . cape-sgml)
+	 ("C-c . r" . cape-rfc1345))
   :init
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
