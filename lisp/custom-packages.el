@@ -310,74 +310,6 @@
   (((rust-mode haskell-mode)
     . eglot-ensure)))
 
-(use-package dape
-  :ensure t
-  :hook
-  (rustic-mode . my/dape-rust-example-setup)
-  :config
-  (defun my/dape-lldb-dap-path ()
-    (or (executable-find "lldb-dap")
-	(and (executable-find "xcrun")
-	     (string-trim
-	      (shell-command-to-string "xcrun -f lldb-dap")))))
-  (add-to-list 'dape-configs
-	       `(lldb-dap-attach
-		 modes (prog-mode)
-		 command ,(my/dape-lldb-dap-path)
-		 fn (lambda (cfg)
-		      (plist-put cfg :pid (read-number "PID to attach: ")))
-		 :type "lldb-dap"
-		 :request "attach"))
-  (defun my/dape-rust-examples (root)
-    (let* ((default-directory root)
-	   (json (shell-command-to-string
-		  (concat (shell-quote-argument (executable-find "cargo"))
-			  " metadata --no-deps --format-version 1")))
-	   (data (json-parse-string json
-				    :object-type 'alist
-				    :array-type 'list
-				    :null-object nil
-				    :false-object nil))
-	   (packages (alist-get 'packages data))
-	   (target-dir (alist-get 'target_directory data))
-	   (examples
-	    (cl-loop for pkg in packages
-		     append (cl-loop for ex in (alist-get 'targets pkg)
-				     when (member "example" (alist-get 'kind ex))
-				     collect (cons (alist-get 'name ex)
-						   (alist-get 'src_path ex))))))
-    (cons target-dir examples)))
-  (defun my/dape-rust-example-setup ()
-    (interactive)
-    (when-let* ((root (locate-dominating-file default-directory "Cargo.toml")))
-      (let* ((lldb-dap (my/dape-lldb-dap-path))
-	     (info (my/dape-rust-examples root))
-	     (target-dir (car info))
-	     (examples (cdr info)))
-	(dolist (pair examples)
-	  (let* ((exe-name (car pair))
-		 (prog (expand-file-name
-			(concat "debug/examples/" exe-name) target-dir))
-		 (sym (intern (concat "rust-example-" exe-name)))
-		 (display (symbol-name sym)))
-	    (unless (assoc sym dape-configs)
-	      (add-to-list
-	       'dape-configs
-	       `(,sym
-		 modes (rustic-mode)
-		 command ,lldb-dap
-		 command-cwd ,target-dir
-		 ensure (lambda (config)
-			  (unless (file-exists-p ,prog)
-			    (user-error "Run: cargo build --example %s" ,exe-name)))
-		 :type "lldb-dap"
-		 :request "launch"
-		 :name ,display
-		 :program ,prog
-		 :console "externalTerminal"
-		 :cwd ,(file-truename root)
-		 :args [])))))))))
-
 (use-package corfu
   :ensure t
   :custom
@@ -439,6 +371,207 @@
   (rustic-rustfmt-args "+nightly")
   :bind (("C-c C-f" . rustic-format-buffer))
   :hook (rust-mode . (lambda () (setq indent-tabs-mode nil))))
+
+(use-package dape
+  :ensure t
+  :commands dape
+
+  :init
+  (defvar my/dape--rust-example-cache (make-hash-table :test 'equal)
+    "ROOT -> (TARGET-DIR . ((NAME . SRC-PATH) ...))")
+  (defvar my/dape--rust-test-cache (make-hash-table :test 'equal)
+    "ROOT::FEATURES -> ((NAME . EXE) ...)")
+
+  (defcustom my/dape-rust-test-features ""
+    "Fallback features for cargo test --no-run when eglot config is unset.
+Comma separated."
+    :type 'string
+    :group 'my)
+
+  (defun my/dape--lldb-dap-path ()
+    "Return path to lldb-dap executable, or nil."
+    (or (executable-find "lldb-dap")
+        (and (executable-find "xcrun")
+             (string-trim (shell-command-to-string "xcrun -f lldb-dap")))))
+
+  (defun my/dape--cargo ()
+    (or (executable-find "cargo")
+        (user-error "cargo not found")))
+
+  (defun my/dape--rust-root ()
+    (or (locate-dominating-file default-directory "Cargo.toml")
+        (user-error "Not in a Cargo project")))
+
+  (defun my/dape--rust-eglot-features ()
+    "Read cargo features from buffer-local `eglot-workspace-configuration'.
+Returns a comma-separated string, or nil if unset."
+    (when (bound-and-true-p eglot-workspace-configuration)
+      (let* ((cfg eglot-workspace-configuration)
+             (ra (or (plist-get cfg :rust-analyzer)
+                     (cdr (assq 'rust-analyzer cfg))))
+             (cargo (and ra (or (plist-get ra :cargo)
+                                (cdr (assq 'cargo ra)))))
+             (features (and cargo (or (plist-get cargo :features)
+                                      (cdr (assq 'features cargo))))))
+        (cond
+         ((vectorp features)
+          (mapconcat #'identity features ","))
+         ((and (listp features) features)
+          (mapconcat #'identity features ","))
+         ((stringp features) features)
+         (t nil)))))
+
+  (defun my/dape--rust-examples (root)
+    (or (gethash root my/dape--rust-example-cache)
+        (puthash root
+                 (let* ((default-directory root)
+                        (json (shell-command-to-string
+                               (concat (shell-quote-argument (my/dape--cargo))
+                                       " metadata --no-deps --format-version 1")))
+                        (data (json-parse-string json
+                                                 :object-type 'alist
+                                                 :array-type 'list
+                                                 :null-object nil
+                                                 :false-object nil))
+                        (packages (alist-get 'packages data))
+                        (target-dir (alist-get 'target_directory data))
+                        (examples
+                         (cl-loop for pkg in packages
+                                  append (cl-loop for ex in (alist-get 'targets pkg)
+                                                  when (member "example" (alist-get 'kind ex))
+                                                  collect (cons (alist-get 'name ex)
+                                                                (alist-get 'src_path ex))))))
+                   (cons target-dir examples))
+                 my/dape--rust-example-cache)))
+
+  (defun my/dape--rust-tests (root &optional features)
+    (let* ((features (or features my/dape-rust-test-features))
+           (key (concat (file-truename root) "::" features)))
+      (or (gethash key my/dape--rust-test-cache)
+          (puthash key
+                   (let* ((default-directory root)
+                          (feat-arg (if (string-empty-p features)
+                                        ""
+                                      (concat " --features "
+                                              (shell-quote-argument features))))
+                          (json (shell-command-to-string
+                                 (concat (shell-quote-argument (my/dape--cargo))
+                                         " test --no-run --message-format=json"
+                                         feat-arg
+                                         " 2>/dev/null")))
+                          (result nil))
+                     (dolist (line (split-string json "\n" t))
+                       (when (string-prefix-p "{" line)
+                         (condition-case nil
+                             (let* ((obj (json-parse-string line
+                                                            :object-type 'alist
+                                                            :array-type 'list
+                                                            :null-object nil
+                                                            :false-object nil))
+                                    (exe (alist-get 'executable obj))
+                                    (target (alist-get 'target obj))
+                                    (kinds (alist-get 'kind target)))
+                               (when (and exe
+                                          (or (member "test" kinds)
+                                              (alist-get 'test target)))
+                                 (push (cons (alist-get 'name target) exe) result)))
+                           (error nil))))
+                     (nreverse result))
+                   my/dape--rust-test-cache))))
+
+  (defun my/dape--rust-test-names (exe)
+    "Return list of test names in EXE."
+    (let ((output (shell-command-to-string
+                   (concat (shell-quote-argument exe)
+                           " --list --format terse 2>/dev/null"))))
+      (cl-loop for line in (split-string output "\n" t)
+               when (string-match ": test$" line)
+               collect (string-trim (substring line 0 (match-beginning 0))))))
+
+  (defun my/dape-rust-clear-cache ()
+    "Clear cached example/test targets.
+Call after adding targets or switching features."
+    (interactive)
+    (clrhash my/dape--rust-example-cache)
+    (clrhash my/dape--rust-test-cache)
+    (message "dape rust cache cleared"))
+
+  (defun my/dape-rust-example-fn (config)
+    "Prompt for an example and set :program / :cwd / command-cwd."
+    (let* ((root (file-truename (my/dape--rust-root)))
+           (info (my/dape--rust-examples root))
+           (target-dir (file-truename (car info)))
+           (examples (cdr info))
+           (chosen (completing-read "Example: " (mapcar #'car examples) nil t))
+           (prog (expand-file-name (concat "debug/examples/" chosen) target-dir))
+           (features (my/dape--rust-eglot-features)))
+      (unless (file-exists-p prog)
+        (user-error "Run: cargo build --example %s%s"
+                    chosen
+                    (if features (concat " --features " features) "")))
+      (setq config (plist-put config :cwd root))
+      (setq config (plist-put config 'command-cwd target-dir))
+      (setq config (plist-put config :program prog))
+      config))
+
+  (defun my/dape-rust-test-fn (config)
+    "Prompt for features, test binary, and test names."
+    (let* ((root (file-truename (my/dape--rust-root)))
+           (default-features (or (my/dape--rust-eglot-features)
+                                 my/dape-rust-test-features))
+           (input (read-string (format "Features (default: \"%s\"): " default-features)
+                               nil nil default-features))
+           (features (if (string-empty-p input) default-features input))
+           (tests (my/dape--rust-tests root features)))
+      (unless tests
+        (user-error "No test binaries found with features: \"%s\"" features))
+      (let* ((chosen (completing-read "Test binary: " (mapcar #'car tests) nil t))
+             (exe (cdr (assoc chosen tests)))
+             (names (my/dape--rust-test-names exe))
+             (selected (completing-read-multiple
+                        "Test names (empty = all, comma separated): "
+                        names nil nil)))
+        (setq config (plist-put config :cwd root))
+        (setq config (plist-put config 'command-cwd root))
+        (setq config (plist-put config :program exe))
+        (if (null selected)
+            config
+          (plist-put config :args
+                     (append selected
+                             (if (= 1 (length selected)) '("--exact") nil)
+                             '("--nocapture")))))))
+
+  :config
+  (add-to-list 'dape-configs
+               `(lldb-dap-attach
+                 modes (prog-mode)
+                 command ,(my/dape--lldb-dap-path)
+                 fn (lambda (cfg)
+                      (plist-put cfg :pid (read-number "PID to attach: ")))
+                 :type "lldb-dap"
+                 :request "attach"))
+  (add-to-list 'dape-configs
+               `(rust-example
+                 modes (rustic-mode)
+                 command ,(my/dape--lldb-dap-path)
+                 fn my/dape-rust-example-fn
+                 :type "lldb-dap"
+                 :request "launch"
+                 :name "rust-example"
+                 :cwd "."
+                 :console "integratedTerminal"
+                 :args []))
+  (add-to-list 'dape-configs
+               `(rust-test
+                 modes (rustic-mode)
+                 command ,(my/dape--lldb-dap-path)
+                 fn my/dape-rust-test-fn
+                 :type "lldb-dap"
+                 :request "launch"
+                 :name "rust-test"
+                 :cwd "."
+                 :console "integratedTerminal"
+                 :args [])))
 
 (use-package toml-mode
   :ensure t)
