@@ -9,8 +9,9 @@
 (setq package-selected-packages
       '(rainbow-delimiters
 	doom-themes
+	doom-modeline
+	nerd-icons
 	crux
-	powerline
 	diminish
 	magit
 	which-key
@@ -18,34 +19,32 @@
 	vertico
 	marginalia
 	consult
+	embark
+	embark-consult
 	avy
 	auctex
 	lua-mode
 	cmake-mode
 	dockerfile-mode
 	groovy-mode
-	json-mode
 	glsl-mode
 	wgsl-mode
 	yaml-mode
 	haskell-mode
 	ormolu
-	git-gutter
-	git-gutter-fringe
+	diff-hl
 	corfu
 	cape
 	orderless
 	yasnippet
 	rustic
 	dape
-	toml-mode
 	typescript-mode
 	markdown-mode
 	elm-mode
-	all-the-icons
 	dhall-mode
 	org-roam
-	org-bullets))
+	org-modern))
 
 (use-package diminish
   :ensure t
@@ -65,7 +64,7 @@
 		   (t
 		    (font-spec :family font-name
 			     :size 9.0)))))
-       (set-frame-font en))
+	       (set-frame-font en nil t))
   (let* ((zh (cond ((eq system-type 'darwin)
 		    (font-spec :family "手札体-简"
 			       :size 15.0))
@@ -87,6 +86,8 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (show-paren-mode 1)
+  (setq auto-revert-verbose nil)
+  (global-auto-revert-mode 1)
   (transient-mark-mode -1)
   (setq visible-bell nil)
   (setq inhibit-startup-message t)
@@ -184,10 +185,28 @@
   :ensure t
   :bind (("C-o" . crux-smart-open-line)))
 
-(use-package powerline
+(use-package nerd-icons
   :ensure t
+  :defer t)
+
+(use-package doom-modeline
+  :ensure t
+  :after doom-themes
   :config
-  (powerline-default-theme))
+  (let ((nerd-font
+         (and (display-graphic-p)
+              (seq-find
+               (lambda (family)
+                 (find-font (font-spec :family family)))
+               '("Symbols Nerd Font Mono"
+                 "Symbols Nerd Font"
+                 "Maple Mono NF"
+                 "JetBrainsMono Nerd Font"
+                 "Hack Nerd Font")))))
+    (when nerd-font
+      (setq nerd-icons-font-family nerd-font))
+    (setq doom-modeline-icon (and nerd-font t)))
+  (doom-modeline-mode 1))
 
 (use-package time
   :custom
@@ -255,6 +274,16 @@
   :bind (("C-x b" . consult-buffer)
 	 ("M-y" . consult-yank-pop)))
 
+(use-package embark
+  :ensure t
+  :bind (("C-." . embark-act)
+	 ("C-c e" . embark-dwim)))
+
+(use-package embark-consult
+  :ensure t
+  :after (embark consult)
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
+
 (use-package avy
   :ensure t
   :bind (("C-:" . avy-goto-char)))
@@ -282,10 +311,6 @@
   :defer t)
 
 (use-package groovy-mode
-  :ensure t
-  :defer t)
-
-(use-package json-mode
   :ensure t
   :defer t)
 
@@ -334,26 +359,13 @@
 (use-package project
   :defer t)
 
-(use-package git-gutter
+(use-package diff-hl
   :ensure t
-  :defer t
-  :diminish git-gutter-mode
-  :hook ((haskell-mode . git-gutter-mode)
-	 (rust-mode . git-gutter-mode)
-	 (sp3-mode . git-gutter-mode))
+  :hook ((prog-mode . diff-hl-mode)
+	 (dired-mode . diff-hl-dired-mode))
   :config
-  (setq git-gutter:update-interval 0.2))
-
-(use-package git-gutter-fringe
-  :ensure t
-  :after git-gutter
-  :config
-  (define-fringe-bitmap
-    'git-gutter-fr:added [224] nil nil '(center repeated))
-  (define-fringe-bitmap
-    'git-gutter-fr:modified [224] nil nil '(center repeated))
-  (define-fringe-bitmap
-    'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
+  (unless (display-graphic-p)
+    (diff-hl-margin-mode 1)))
 
 (use-package eglot
   :custom
@@ -441,6 +453,10 @@
     "ROOT -> (TARGET-DIR . ((NAME . SRC-PATH) ...))")
   (defvar my/dape--rust-test-cache (make-hash-table :test 'equal)
     "ROOT::FEATURES -> ((NAME . EXE) ...)")
+  (defvar my/dape--rust-metadata-cache (make-hash-table :test 'equal)
+    "ROOT -> parsed cargo metadata.")
+  (defvar my/dape--rust-test-name-cache (make-hash-table :test 'equal)
+    "EXE plus mtime and size -> test names.")
 
   (defcustom my/dape-rust-test-features ""
     "Fallback features for cargo test --no-run when eglot config is unset.
@@ -481,18 +497,63 @@ Returns a comma-separated string, or nil if unset."
          ((stringp features) features)
          (t nil)))))
 
+  (defun my/dape--rust-metadata (root)
+    "Return parsed `cargo metadata' for ROOT, caching the result."
+    (or (gethash root my/dape--rust-metadata-cache)
+        (puthash root
+                 (let* ((default-directory root)
+                        (out (generate-new-buffer " *my-cargo-metadata-out*"))
+                        (err (generate-new-buffer " *my-cargo-metadata-err*")))
+                   (unwind-protect
+                       (let ((proc (make-process
+                                    :name "my-cargo-metadata"
+                                    :buffer out
+                                    :stderr err
+                                    :coding 'utf-8
+                                    :noquery t
+                                    :sentinel #'ignore
+                                    :command
+                                    (list (my/dape--cargo)
+                                          "metadata" "--no-deps"
+                                          "--format-version" "1"))))
+                         (while (process-live-p proc)
+                           (accept-process-output proc 0.1))
+                         (let ((status (process-exit-status proc)))
+                           (if (and (numberp status) (zerop status))
+                               (with-current-buffer out
+                                 (json-parse-string
+                                  (buffer-string)
+                                  :object-type 'alist
+                                  :array-type 'list
+                                  :null-object nil
+                                  :false-object nil))
+                             (user-error "cargo metadata failed:\n%s%s"
+                                         (with-current-buffer out (buffer-string))
+                                         (with-current-buffer err (buffer-string))))))
+                     (kill-buffer out)
+                     (kill-buffer err)))
+                 my/dape--rust-metadata-cache)))
+
+  (defun my/dape--rust-package (root)
+    "Return the Cargo package containing the current buffer, or nil."
+    (let* ((metadata (my/dape--rust-metadata root))
+           (file (or (buffer-file-name) default-directory))
+           (best nil)
+           (best-len 0))
+      (dolist (pkg (alist-get 'packages metadata))
+        (let* ((manifest (alist-get 'manifest_path pkg))
+               (dir (and manifest (file-name-directory manifest))))
+          (when (and dir
+                     (file-in-directory-p file dir)
+                     (> (length dir) best-len))
+            (setq best (alist-get 'name pkg)
+                  best-len (length dir)))))
+      best))
+
   (defun my/dape--rust-examples (root)
     (or (gethash root my/dape--rust-example-cache)
         (puthash root
-                 (let* ((default-directory root)
-                        (json (shell-command-to-string
-                               (concat (shell-quote-argument (my/dape--cargo))
-                                       " metadata --no-deps --format-version 1")))
-                        (data (json-parse-string json
-                                                 :object-type 'alist
-                                                 :array-type 'list
-                                                 :null-object nil
-                                                 :false-object nil))
+                 (let* ((data (my/dape--rust-metadata root))
                         (packages (alist-get 'packages data))
                         (target-dir (alist-get 'target_directory data))
                         (examples
@@ -506,11 +567,15 @@ Returns a comma-separated string, or nil if unset."
 
   (defun my/dape--rust-tests (root &optional features)
     (let* ((features (or features my/dape-rust-test-features))
-           (key (concat (file-truename root) "::" features)))
+           (package (my/dape--rust-package root))
+           (key (concat (file-truename root) "::" features "::"
+                        (or package ""))))
       (or (gethash key my/dape--rust-test-cache)
           (puthash key
                    (let* ((default-directory root)
                           (args (append '("test" "--no-run" "--message-format=json")
+                                        (when package
+                                          (list "--package" package))
                                         (unless (string-empty-p features)
                                           (list "--features" features))))
                           (buf (generate-new-buffer " *my-cargo-test*"))
@@ -546,26 +611,37 @@ Returns a comma-separated string, or nil if unset."
 
   (defun my/dape--rust-test-names (exe)
     "Return list of test names in EXE."
-    (let ((buf (generate-new-buffer " *my-rust-test-list*")))
-      (unwind-protect
-          (let ((status (call-process exe nil buf nil
-                                      "--list" "--format" "terse")))
-            (with-current-buffer buf
-              (unless (zerop status)
-                (user-error "Failed to list tests in %s:\n%s"
-                            exe (buffer-string)))
-              (cl-loop for line in (split-string (buffer-string) "\n" t)
-                       when (string-match ": test$" line)
-                       collect (string-trim
-                                (substring line 0 (match-beginning 0))))))
-        (kill-buffer buf))))
+    (let* ((attrs (file-attributes exe))
+           (key (list exe
+                      (and attrs (file-attribute-modification-time attrs))
+                      (and attrs (file-attribute-size attrs)))))
+      (unless attrs
+        (user-error "Test binary not found: %s" exe))
+      (or (gethash key my/dape--rust-test-name-cache)
+          (puthash key
+                   (let ((buf (generate-new-buffer " *my-rust-test-list*")))
+                     (unwind-protect
+                         (let ((status (call-process exe nil buf nil
+                                                     "--list" "--format" "terse")))
+                           (with-current-buffer buf
+                             (unless (zerop status)
+                               (user-error "Failed to list tests in %s:\n%s"
+                                           exe (buffer-string)))
+                             (cl-loop for line in (split-string (buffer-string) "\n" t)
+                                      when (string-match ": test$" line)
+                                      collect (string-trim
+                                               (substring line 0 (match-beginning 0))))))
+                       (kill-buffer buf)))
+                   my/dape--rust-test-name-cache))))
 
   (defun my/dape-rust-clear-cache ()
-    "Clear cached example/test targets.
-Call after adding targets or switching features."
+    "Clear cached cargo metadata, examples, test targets and test names.
+Call after changing Cargo.toml or switching features."
     (interactive)
+    (clrhash my/dape--rust-metadata-cache)
     (clrhash my/dape--rust-example-cache)
     (clrhash my/dape--rust-test-cache)
+    (clrhash my/dape--rust-test-name-cache)
     (message "dape rust cache cleared"))
 
   (defun my/dape-rust-example-fn (config)
@@ -645,10 +721,6 @@ Call after adding targets or switching features."
                  :console "integratedTerminal"
                  :args [])))
 
-(use-package toml-mode
-  :ensure t
-  :defer t)
-
 (use-package typescript-mode
   :ensure t
   :defer t)
@@ -658,10 +730,6 @@ Call after adding targets or switching features."
   :defer t)
 
 (use-package elm-mode
-  :ensure t
-  :defer t)
-
-(use-package all-the-icons
   :ensure t
   :defer t)
 
@@ -700,9 +768,9 @@ Call after adding targets or switching features."
   (setq org-roam-directory "~/notes/")
   (org-roam-db-autosync-mode 1))
 
-(use-package org-bullets
+(use-package org-modern
   :ensure t
   :defer t
-  :hook (org-mode . org-bullets-mode))
+  :hook (org-mode . org-modern-mode))
 
 (provide 'custom-packages)
