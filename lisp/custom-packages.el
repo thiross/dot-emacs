@@ -31,12 +31,12 @@
 	wgsl-mode
 	yaml-mode
 	haskell-mode
-	ormolu
 	diff-hl
 	corfu
 	cape
 	orderless
 	yasnippet
+	apheleia
 	rustic
 	dape
 	typescript-mode
@@ -335,26 +335,15 @@
   :defer t
   :preface
   (defvar haskell-compile-cabal-build-command)
-  (defun my/haskell-format-buffer ()
-    (interactive)
-    (if (executable-find "ormolu")
-	(progn
-	  (require 'ormolu)
-	  (ormolu-format-buffer))
-      (user-error "ormolu executable not found")))
   :hook (haskell-mode
 	 . (lambda ()
 	     (haskell-indentation-mode)
 	     (setq haskell-compile-cabal-build-command "stack build")))
   :bind (:map haskell-mode-map
 	      ("C-c C-c C-b" . haskell-compile)
-	      ("C-c C-f" . my/haskell-format-buffer)
+	      ("C-c C-f" . apheleia-format-buffer)
 	      :map haskell-cabal-mode-map
 	      ("C-c C-c C-b" . haskell-compile)))
-
-(use-package ormolu
-  :ensure t
-  :defer t)
 
 (use-package project
   :defer t)
@@ -429,6 +418,12 @@
   :hook
   ((prog-mode . yas-minor-mode)))
 
+(use-package apheleia
+  :ensure t
+  :config
+  (setf (alist-get 'rustfmt apheleia-formatters)
+	'("rustfmt" "+nightly" "--quiet" "--emit" "stdout")))
+
 (use-package dabbrev
   :bind (("M-/" . dabbrev-completion)
 	 ("C-M-/" . dabbrev-expand))
@@ -441,7 +436,8 @@
   (rustic-lsp-client 'eglot)
   (rustic-rustfmt-bin "rustfmt")
   (rustic-rustfmt-args "+nightly")
-  :bind (("C-c C-f" . rustic-format-buffer))
+  :bind (:map rustic-mode-map
+	      ("C-c C-f" . apheleia-format-buffer))
   :hook (rust-mode . (lambda () (setq indent-tabs-mode nil))))
 
 (use-package dape
@@ -497,10 +493,24 @@ Returns a comma-separated string, or nil if unset."
          ((stringp features) features)
          (t nil)))))
 
+  (defun my/dape--rust-manifest-signature (root)
+    "Return a cache signature for ROOT's manifest and lockfile."
+    (let* ((manifest (expand-file-name "Cargo.toml" root))
+           (lock-root (locate-dominating-file root "Cargo.lock"))
+           (lock (and lock-root (expand-file-name "Cargo.lock" lock-root))))
+      (mapcar
+       (lambda (file)
+         (let ((attrs (and file (file-attributes file))))
+           (list file
+                 (and attrs (file-attribute-modification-time attrs))
+                 (and attrs (file-attribute-size attrs)))))
+       (list manifest lock))))
+
   (defun my/dape--rust-metadata (root)
     "Return parsed `cargo metadata' for ROOT, caching the result."
-    (or (gethash root my/dape--rust-metadata-cache)
-        (puthash root
+    (let ((key (list root (my/dape--rust-manifest-signature root))))
+      (or (gethash key my/dape--rust-metadata-cache)
+          (puthash key
                  (let* ((default-directory root)
                         (out (generate-new-buffer " *my-cargo-metadata-out*"))
                         (err (generate-new-buffer " *my-cargo-metadata-err*")))
@@ -532,7 +542,7 @@ Returns a comma-separated string, or nil if unset."
                                          (with-current-buffer err (buffer-string))))))
                      (kill-buffer out)
                      (kill-buffer err)))
-                 my/dape--rust-metadata-cache)))
+                   my/dape--rust-metadata-cache))))
 
   (defun my/dape--rust-package (root)
     "Return the Cargo package containing the current buffer, or nil."
@@ -551,8 +561,9 @@ Returns a comma-separated string, or nil if unset."
       best))
 
   (defun my/dape--rust-examples (root)
-    (or (gethash root my/dape--rust-example-cache)
-        (puthash root
+    (let ((key (list root (my/dape--rust-manifest-signature root))))
+      (or (gethash key my/dape--rust-example-cache)
+          (puthash key
                  (let* ((data (my/dape--rust-metadata root))
                         (packages (alist-get 'packages data))
                         (target-dir (alist-get 'target_directory data))
@@ -563,13 +574,15 @@ Returns a comma-separated string, or nil if unset."
                                                   collect (cons (alist-get 'name ex)
                                                                 (alist-get 'src_path ex))))))
                    (cons target-dir examples))
-                 my/dape--rust-example-cache)))
+                   my/dape--rust-example-cache))))
 
   (defun my/dape--rust-tests (root &optional features)
     (let* ((features (or features my/dape-rust-test-features))
            (package (my/dape--rust-package root))
-           (key (concat (file-truename root) "::" features "::"
-                        (or package ""))))
+           (key (list (file-truename root)
+                      features
+                      (or package "")
+                      (my/dape--rust-manifest-signature root))))
       (or (gethash key my/dape--rust-test-cache)
           (puthash key
                    (let* ((default-directory root)
