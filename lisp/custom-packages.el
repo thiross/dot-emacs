@@ -1,10 +1,55 @@
 ;;; -*- lexical-binding: t; -*-
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "http://melpa.org/packages/")))
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+			 ("melpa" . "https://melpa.org/packages/")))
 
 (require 'package)
 
 (require 'use-package)
+
+(setq package-selected-packages
+      '(rainbow-delimiters
+	doom-themes
+	crux
+	powerline
+	diminish
+	magit
+	which-key
+	multiple-cursors
+	vertico
+	marginalia
+	consult
+	avy
+	auctex
+	lua-mode
+	cmake-mode
+	dockerfile-mode
+	groovy-mode
+	json-mode
+	glsl-mode
+	wgsl-mode
+	yaml-mode
+	haskell-mode
+	ormolu
+	git-gutter
+	git-gutter-fringe
+	corfu
+	cape
+	orderless
+	yasnippet
+	rustic
+	dape
+	toml-mode
+	typescript-mode
+	markdown-mode
+	elm-mode
+	all-the-icons
+	dhall-mode
+	org-roam
+	org-bullets))
+
+(use-package diminish
+  :ensure t
+  :demand t)
 
 (use-package emacs
   :init
@@ -63,8 +108,8 @@
   (if (eq system-type 'darwin)
       (setq default-directory "~/"))
   (setq read-process-output-max (* 1024 1024)
-	gc-cons-percentage 0.5
-	gc-cons-threshold (* 1024 1024 500))
+	gc-cons-percentage 0.1
+	gc-cons-threshold (* 1024 1024 64))
   :diminish eldoc-mode
   :bind
   (("S-SPC" . set-mark-command)
@@ -150,9 +195,6 @@
   (display-time-mode t)
   (display-time-use-mail-icon t))
 
-(use-package diminish
-  :ensure t)
-
 (use-package align
   :commands align
   :bind (("M-[" . align-code)
@@ -164,9 +206,9 @@
     (interactive "rP")
     (if (null arg)
 	(align beg end)
-      (let ((end-mark (copy-marker end))
-	    (indent-region beg end-mark nil)
-	    (align beg end-mark))))))
+      (let ((end-mark (copy-marker end)))
+	(indent-region beg end-mark nil)
+	(align beg end-mark)))))
 
 (use-package magit
   :ensure t
@@ -227,25 +269,29 @@
 
 (use-package lua-mode
   :ensure t
-  :config
+  :defer t
   :hook (lua-mode . (lambda ()
-		      (electric-indent-mode -1))))
+		      (electric-indent-local-mode -1))))
 
-(if (not (eq system-type 'gnu/linux))
-    (use-package cmake-mode
-      :ensure t))
+(use-package cmake-mode
+  :ensure t
+  :defer t)
 
 (use-package dockerfile-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package groovy-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package json-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package glsl-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package wgsl-mode
   :ensure t
@@ -256,37 +302,51 @@
 	(c-set-offset 'arglist-close 0)))))
 
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package haskell-mode
   :ensure t
+  :defer t
+  :preface
+  (defvar haskell-compile-cabal-build-command)
+  (defun my/haskell-format-buffer ()
+    (interactive)
+    (if (executable-find "ormolu")
+	(progn
+	  (require 'ormolu)
+	  (ormolu-format-buffer))
+      (user-error "ormolu executable not found")))
   :hook (haskell-mode
 	 . (lambda ()
 	     (haskell-indentation-mode)
 	     (setq haskell-compile-cabal-build-command "stack build")))
   :bind (:map haskell-mode-map
 	      ("C-c C-c C-b" . haskell-compile)
-	      ("C-c C-f" . ormolu-format-buffer)
+	      ("C-c C-f" . my/haskell-format-buffer)
 	      :map haskell-cabal-mode-map
 	      ("C-c C-c C-b" . haskell-compile)))
 
 (use-package ormolu
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package project
-  :ensure t)
+  :defer t)
 
 (use-package git-gutter
   :ensure t
+  :defer t
   :diminish git-gutter-mode
   :hook ((haskell-mode . git-gutter-mode)
 	 (rust-mode . git-gutter-mode)
 	 (sp3-mode . git-gutter-mode))
   :config
-  (setq git-gutter:update-interval 0.02))
+  (setq git-gutter:update-interval 0.2))
 
 (use-package git-gutter-fringe
   :ensure t
+  :after git-gutter
   :config
   (define-fringe-bitmap
     'git-gutter-fr:added [224] nil nil '(center repeated))
@@ -296,7 +356,6 @@
     'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
 (use-package eglot
-  :ensure t
   :custom
   (eldoc-echo-area-use-multiline-p nil)
   (eglot-autoshutdown t)
@@ -315,10 +374,12 @@
   :custom
   (tab-always-indent 'complete)
   (completion-cycle-threshold nil)
+  (corfu-auto t)
   (corfu-auto-prefix 3)
   (corfu-auto-delay 0.25)
-  :init
-  (global-corfu-mode))
+  :config
+  (require 'corfu-auto)
+  (global-corfu-mode 1))
 
 (use-package cape
   :ensure t
@@ -357,7 +418,6 @@
   ((prog-mode . yas-minor-mode)))
 
 (use-package dabbrev
-  :ensure t
   :bind (("M-/" . dabbrev-completion)
 	 ("C-M-/" . dabbrev-expand))
   :custom
@@ -386,7 +446,7 @@
     "Fallback features for cargo test --no-run when eglot config is unset.
 Comma separated."
     :type 'string
-    :group 'my)
+    :group 'dape)
 
   (defun my/dape--lldb-dap-path ()
     "Return path to lldb-dap executable, or nil."
@@ -450,43 +510,55 @@ Returns a comma-separated string, or nil if unset."
       (or (gethash key my/dape--rust-test-cache)
           (puthash key
                    (let* ((default-directory root)
-                          (feat-arg (if (string-empty-p features)
-                                        ""
-                                      (concat " --features "
-                                              (shell-quote-argument features))))
-                          (json (shell-command-to-string
-                                 (concat (shell-quote-argument (my/dape--cargo))
-                                         " test --no-run --message-format=json"
-                                         feat-arg
-                                         " 2>/dev/null")))
-                          (result nil))
-                     (dolist (line (split-string json "\n" t))
-                       (when (string-prefix-p "{" line)
-                         (condition-case nil
-                             (let* ((obj (json-parse-string line
-                                                            :object-type 'alist
-                                                            :array-type 'list
-                                                            :null-object nil
-                                                            :false-object nil))
-                                    (exe (alist-get 'executable obj))
-                                    (target (alist-get 'target obj))
-                                    (kinds (alist-get 'kind target)))
-                               (when (and exe
-                                          (or (member "test" kinds)
-                                              (alist-get 'test target)))
-                                 (push (cons (alist-get 'name target) exe) result)))
-                           (error nil))))
-                     (nreverse result))
+                          (args (append '("test" "--no-run" "--message-format=json")
+                                        (unless (string-empty-p features)
+                                          (list "--features" features))))
+                          (buf (generate-new-buffer " *my-cargo-test*"))
+                          (status (apply #'call-process
+                                         (my/dape--cargo) nil buf nil args)))
+                     (unwind-protect
+                         (with-current-buffer buf
+                           (unless (zerop status)
+                             (user-error "cargo test --no-run failed:\n%s"
+                                         (buffer-string)))
+                           (let (result)
+                             (dolist (line (split-string (buffer-string) "\n" t))
+                               (when (string-prefix-p "{" line)
+                                 (condition-case nil
+                                     (let* ((obj (json-parse-string
+                                                  line
+                                                  :object-type 'alist
+                                                  :array-type 'list
+                                                  :null-object nil
+                                                  :false-object nil))
+                                            (exe (alist-get 'executable obj))
+                                            (target (alist-get 'target obj))
+                                            (kinds (alist-get 'kind target)))
+                                       (when (and exe
+                                                  (or (member "test" kinds)
+                                                      (alist-get 'test target)))
+                                         (push (cons (alist-get 'name target) exe)
+                                               result)))
+                                   (error nil))))
+                             (nreverse result)))
+                       (kill-buffer buf)))
                    my/dape--rust-test-cache))))
 
   (defun my/dape--rust-test-names (exe)
     "Return list of test names in EXE."
-    (let ((output (shell-command-to-string
-                   (concat (shell-quote-argument exe)
-                           " --list --format terse 2>/dev/null"))))
-      (cl-loop for line in (split-string output "\n" t)
-               when (string-match ": test$" line)
-               collect (string-trim (substring line 0 (match-beginning 0))))))
+    (let ((buf (generate-new-buffer " *my-rust-test-list*")))
+      (unwind-protect
+          (let ((status (call-process exe nil buf nil
+                                      "--list" "--format" "terse")))
+            (with-current-buffer buf
+              (unless (zerop status)
+                (user-error "Failed to list tests in %s:\n%s"
+                            exe (buffer-string)))
+              (cl-loop for line in (split-string (buffer-string) "\n" t)
+                       when (string-match ": test$" line)
+                       collect (string-trim
+                                (substring line 0 (match-beginning 0))))))
+        (kill-buffer buf))))
 
   (defun my/dape-rust-clear-cache ()
     "Clear cached example/test targets.
@@ -574,36 +646,42 @@ Call after adding targets or switching features."
                  :args [])))
 
 (use-package toml-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package typescript-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package elm-mode
   :ensure t
-  :config)
+  :defer t)
 
 (use-package all-the-icons
   :ensure t
-  :if (display-graphic-p))
+  :defer t)
 
 (use-package dhall-mode
   :ensure t
+  :defer t
   :config
   (setq
    dhall-format-arguments (\` ("--ascii"))
    dhall-use-header-line nil))
 
 (use-package org
+  :defer t
   :custom
   (org-latex-compiler "xelatex")
   (org-export-backends '(ascii html icalendar latex beamer md)))
 
 (use-package org-babel
   :no-require t
+  :after org
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -615,17 +693,16 @@ Call after adding targets or switching features."
 (use-package org-roam
   :defer t
   :ensure t
-  :init
-  (setq org-roam-v2-ack t)
   :bind (("C-c n f" . org-roam-node-find)
 	 ("C-c n i" . org-roam-node-insert)
 	 ("C-c n t" . org-roam-buffer-toggle))
   :config
   (setq org-roam-directory "~/notes/")
-  (org-roam-setup))
+  (org-roam-db-autosync-mode 1))
 
 (use-package org-bullets
   :ensure t
+  :defer t
   :hook (org-mode . org-bullets-mode))
 
 (provide 'custom-packages)
