@@ -1,4 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
+
+;;; Package setup
+
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
 			 ("melpa" . "https://melpa.org/packages/")))
 
@@ -7,21 +10,27 @@
 (require 'use-package)
 
 (setq package-selected-packages
-      '(rainbow-delimiters
+      '(diminish
 	doom-themes
 	doom-modeline
 	nerd-icons
-	crux
-	diminish
-	magit
-	which-key
-	multiple-cursors
 	vertico
 	marginalia
 	consult
 	embark
 	embark-consult
+	orderless
+	corfu
+	cape
+	yasnippet
 	avy
+	which-key
+	multiple-cursors
+	crux
+	magit
+	diff-hl
+	apheleia
+	rainbow-delimiters
 	auctex
 	lua-mode
 	cmake-mode
@@ -31,24 +40,20 @@
 	wgsl-mode
 	yaml-mode
 	haskell-mode
-	diff-hl
-	corfu
-	cape
-	orderless
-	yasnippet
-	apheleia
-	rustic
-	dape
 	typescript-mode
 	markdown-mode
 	elm-mode
 	dhall-mode
+	rustic
+	dape
 	org-roam
 	org-modern))
 
 (use-package diminish
   :ensure t
   :demand t)
+
+;;; Core behavior
 
 (use-package emacs
   :init
@@ -164,9 +169,7 @@
 			      `([,(cdr char-regexp) 0 font-shape-gstring]))))
     (set-char-table-parent composition-ligature-table composition-function-table)))
 
-(use-package rainbow-delimiters
-  :ensure t
-  :hook ((rustic-mode . rainbow-delimiters-mode)))
+;;; UI and modeline
 
 (use-package doom-themes
   :ensure t
@@ -180,10 +183,6 @@
   (setq doom-themes-treemacs-theme "doom-atom")
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
-
-(use-package crux
-  :ensure t
-  :bind (("C-o" . crux-smart-open-line)))
 
 (use-package nerd-icons
   :ensure t
@@ -214,39 +213,7 @@
   (display-time-mode t)
   (display-time-use-mail-icon t))
 
-(use-package align
-  :commands align
-  :bind (("M-[" . align-code)
-	 ("C-c [" . align-regexp))
-  :custom
-  (align-to-tab-stop nil)
-  :preface
-  (defun align-code (beg end &optional arg)
-    (interactive "rP")
-    (if (null arg)
-	(align beg end)
-      (let ((end-mark (copy-marker end)))
-	(indent-region beg end-mark nil)
-	(align beg end-mark)))))
-
-(use-package magit
-  :ensure t
-  :config
-  :bind (("<f2>". magit-status)))
-
-(use-package which-key
-  :ensure t
-  :diminish
-  :config
-  (which-key-mode))
-
-(use-package multiple-cursors
-  :ensure t
-  :diminish
-  :bind
-  ("C->" . mc/mark-next-like-this)
-  ("C-<" . mc/mark-previous-like-this)
-  ("C-c C-<". mc/mark-all-like-this))
+;;; Completion and navigation
 
 (use-package vertico
   :ensure t
@@ -284,9 +251,128 @@
   :after (embark consult)
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
+(use-package orderless
+  :ensure t
+  :init
+  (setq completion-styles '(orderless basic)
+	completion-category-defaults nil
+	completion-category-overrides '((file styles partial-completion))))
+
+(use-package corfu
+  :ensure t
+  :custom
+  (tab-always-indent 'complete)
+  (completion-cycle-threshold nil)
+  (corfu-auto t)
+  (corfu-auto-prefix 3)
+  (corfu-auto-delay 0.25)
+  :config
+  (require 'corfu-auto)
+  (global-corfu-mode 1))
+
+(use-package cape
+  :ensure t
+  :bind (("C-c . p" . completion-at-point)
+	 ("C-c . t" . complete-tag)
+	 ("C-c . d" . cape-dabbrev)
+	 ("C-c . h" . cape-history)
+	 ("C-c . f" . cape-file)
+	 ("C-c . k" . cape-keyword)
+	 ("C-c . s" . cape-elisp-symbol)
+	 ("C-c . e" . cape-elisp-block)
+	 ("C-c . a" . cape-abbrev)
+	 ("C-c . l" . cape-line)
+	 ("C-c . w" . cape-dict)
+	 ("C-c . :" . cape-emoji)
+	 ("C-c . \\" . cape-tex)
+	 ("C-c . _" . cape-tex)
+	 ("C-c . ^" . cape-tex)
+	 ("C-c . &" . cape-sgml)
+	 ("C-c . r" . cape-rfc1345))
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block))
+
+(use-package yasnippet
+  :ensure t
+  :hook
+  ((prog-mode . yas-minor-mode)))
+
+(use-package dabbrev
+  :bind (("M-/" . dabbrev-completion)
+	 ("C-M-/" . dabbrev-expand))
+  :custom
+  (dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
+
 (use-package avy
   :ensure t
   :bind (("C-:" . avy-goto-char)))
+
+(use-package which-key
+  :ensure t
+  :diminish
+  :config
+  (which-key-mode))
+
+(use-package multiple-cursors
+  :ensure t
+  :diminish
+  :bind
+  ("C->" . mc/mark-next-like-this)
+  ("C-<" . mc/mark-previous-like-this)
+  ("C-c C-<". mc/mark-all-like-this))
+
+;;; Editing and Git
+
+(use-package crux
+  :ensure t
+  :bind (("C-o" . crux-smart-open-line)))
+
+(use-package align
+  :commands align
+  :bind (("M-[" . align-code)
+	 ("C-c [" . align-regexp))
+  :custom
+  (align-to-tab-stop nil)
+  :preface
+  (defun align-code (beg end &optional arg)
+    (interactive "rP")
+    (if (null arg)
+	(align beg end)
+      (let ((end-mark (copy-marker end)))
+	(indent-region beg end-mark nil)
+	(align beg end-mark)))))
+
+(use-package project
+  :defer t)
+
+(use-package magit
+  :ensure t
+  :config
+  :bind (("<f2>". magit-status)))
+
+(use-package diff-hl
+  :ensure t
+  :hook ((prog-mode . diff-hl-mode)
+	 (dired-mode . diff-hl-dired-mode))
+  :config
+  (unless (display-graphic-p)
+    (diff-hl-margin-mode 1)))
+
+;;; Formatting
+
+(use-package apheleia
+  :ensure t
+  :config
+  (setf (alist-get 'rustfmt apheleia-formatters)
+	'("rustfmt" "+nightly" "--quiet" "--emit" "stdout")))
+
+;;; Languages and tooling
+
+(use-package rainbow-delimiters
+  :ensure t
+  :hook ((rustic-mode . rainbow-delimiters-mode)))
 
 (use-package auctex
   :defer t
@@ -345,16 +431,27 @@
 	      :map haskell-cabal-mode-map
 	      ("C-c C-c C-b" . haskell-compile)))
 
-(use-package project
+(use-package typescript-mode
+  :ensure t
   :defer t)
 
-(use-package diff-hl
+(use-package markdown-mode
   :ensure t
-  :hook ((prog-mode . diff-hl-mode)
-	 (dired-mode . diff-hl-dired-mode))
+  :defer t)
+
+(use-package elm-mode
+  :ensure t
+  :defer t)
+
+(use-package dhall-mode
+  :ensure t
+  :defer t
   :config
-  (unless (display-graphic-p)
-    (diff-hl-margin-mode 1)))
+  (setq
+   dhall-format-arguments (\` ("--ascii"))
+   dhall-use-header-line nil))
+
+;;; Rust and LSP
 
 (use-package eglot
   :custom
@@ -369,66 +466,6 @@
   :hook
   (((rust-mode haskell-mode)
     . eglot-ensure)))
-
-(use-package corfu
-  :ensure t
-  :custom
-  (tab-always-indent 'complete)
-  (completion-cycle-threshold nil)
-  (corfu-auto t)
-  (corfu-auto-prefix 3)
-  (corfu-auto-delay 0.25)
-  :config
-  (require 'corfu-auto)
-  (global-corfu-mode 1))
-
-(use-package cape
-  :ensure t
-  :bind (("C-c . p" . completion-at-point)
-	 ("C-c . t" . complete-tag)
-	 ("C-c . d" . cape-dabbrev)
-	 ("C-c . h" . cape-history)
-	 ("C-c . f" . cape-file)
-	 ("C-c . k" . cape-keyword)
-	 ("C-c . s" . cape-elisp-symbol)
-	 ("C-c . e" . cape-elisp-block)
-	 ("C-c . a" . cape-abbrev)
-	 ("C-c . l" . cape-line)
-	 ("C-c . w" . cape-dict)
-	 ("C-c . :" . cape-emoji)
-	 ("C-c . \\" . cape-tex)
-	 ("C-c . _" . cape-tex)
-	 ("C-c . ^" . cape-tex)
-	 ("C-c . &" . cape-sgml)
-	 ("C-c . r" . cape-rfc1345))
-  :init
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-elisp-block))
-
-(use-package orderless
-  :ensure t
-  :init
-  (setq completion-styles '(orderless basic)
-	completion-category-defaults nil
-	completion-category-overrides '((file styles partial-completion))))
-
-(use-package yasnippet
-  :ensure t
-  :hook
-  ((prog-mode . yas-minor-mode)))
-
-(use-package apheleia
-  :ensure t
-  :config
-  (setf (alist-get 'rustfmt apheleia-formatters)
-	'("rustfmt" "+nightly" "--quiet" "--emit" "stdout")))
-
-(use-package dabbrev
-  :bind (("M-/" . dabbrev-completion)
-	 ("C-M-/" . dabbrev-expand))
-  :custom
-  (dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
 
 (use-package rustic
   :ensure t
@@ -734,25 +771,7 @@ Call after changing Cargo.toml or switching features."
                  :console "integratedTerminal"
                  :args [])))
 
-(use-package typescript-mode
-  :ensure t
-  :defer t)
-
-(use-package markdown-mode
-  :ensure t
-  :defer t)
-
-(use-package elm-mode
-  :ensure t
-  :defer t)
-
-(use-package dhall-mode
-  :ensure t
-  :defer t
-  :config
-  (setq
-   dhall-format-arguments (\` ("--ascii"))
-   dhall-use-header-line nil))
+;;; Org
 
 (use-package org
   :defer t
