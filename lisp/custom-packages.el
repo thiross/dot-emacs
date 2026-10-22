@@ -3,7 +3,7 @@
 ;;; Package setup
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-			 ("melpa" . "https://melpa.org/packages/")))
+                         ("melpa" . "https://melpa.org/packages/")))
 
 (require 'package)
 
@@ -13,45 +13,45 @@
 
 (setq package-selected-packages
       '(diminish
-	doom-themes
-	doom-modeline
-	nerd-icons
-	vertico
-	marginalia
-	consult
-	embark
-	embark-consult
-	orderless
-	corfu
-	cape
-	yasnippet
-	avy
-	which-key
-	multiple-cursors
-	crux
-	magit
-	diff-hl
-	apheleia
-	rainbow-delimiters
-	auctex
-	lua-mode
-	cmake-mode
-	dockerfile-mode
-	groovy-mode
-	glsl-mode
-	wgsl-mode
-	yaml-mode
-	haskell-mode
-	typescript-mode
-	markdown-mode
-	elm-mode
-	dhall-mode
-	eglot
-	rustic
-	dape
-	org-roam
-	consult-org-roam
-	org-modern))
+        doom-themes
+        doom-modeline
+        nerd-icons
+        vertico
+        marginalia
+        consult
+        embark
+        embark-consult
+        orderless
+        corfu
+        cape
+        yasnippet
+        avy
+        which-key
+        multiple-cursors
+        crux
+        magit
+        diff-hl
+        apheleia
+        rainbow-delimiters
+        auctex
+        lua-mode
+        cmake-mode
+        dockerfile-mode
+        groovy-mode
+        glsl-mode
+        wgsl-mode
+        yaml-mode
+        haskell-mode
+        typescript-mode
+        markdown-mode
+        elm-mode
+        dhall-mode
+        eglot
+        rustic
+        dape
+        org-roam
+        consult-org-roam
+        org-modern))
 
 (use-package diminish
   :ensure t
@@ -62,27 +62,27 @@
 (use-package emacs
   :init
   (let* ((font-name "Maple Mono")
-	 (en (cond ((eq system-type 'darwin)
-		    (font-spec :family font-name
-			       :size 15
-			       :weight 'normal))
-		   ((eq system-type 'gnu/linux)
-		    (font-spec :family font-name
-			       :size 18.0
-			       :weight 'normal))
-		   (t
-		    (font-spec :family font-name
-			     :size 9.0)))))
-	       (set-frame-font en nil t))
+         (en (cond ((eq system-type 'darwin)
+                    (font-spec :family font-name
+                               :size 15
+                               :weight 'normal))
+                   ((eq system-type 'gnu/linux)
+                    (font-spec :family font-name
+                               :size 18.0
+                               :weight 'normal))
+                   (t
+                    (font-spec :family font-name
+                             :size 9.0)))))
+               (set-frame-font en nil t))
   (let* ((zh (cond ((eq system-type 'darwin)
-		    (font-spec :family "手札体-简"
-			       :size 15.0))
-		   ((eq system-type 'gnu/linux)
-		    (font-spec :family "微软雅黑"
-			       :size 16.0))
-		   (t
-		    (font-spec :family "微软雅黑"
-			       :size 8.0)))))
+                    (font-spec :family "手札体-简"
+                               :size 15.0))
+                   ((eq system-type 'gnu/linux)
+                    (font-spec :family "微软雅黑"
+                               :size 16.0))
+                   (t
+                    (font-spec :family "微软雅黑"
+                               :size 8.0)))))
     (set-fontset-font t 'han zh)
     (set-fontset-font t 'symbol zh)
     (set-fontset-font t 'cjk-misc zh)
@@ -103,23 +103,23 @@
   (setq enable-recursive-minibuffers t)
   (if (display-graphic-p)
       (progn
-	(setq initial-frame-alist
-	      '((width . 80)
-		(height . 30)))
-	(setq default-frame-alist
-	      '((width . 80)
-		(height . 30)))
-	))
+        (setq initial-frame-alist
+              '((width . 80)
+                (height . 30)))
+        (setq default-frame-alist
+              '((width . 80)
+                (height . 30)))
+        ))
   (setq frame-title-format
-	'(buffer-file-name "%f"
-			   (dired-directory dired-directory "%b")))
+        '(buffer-file-name "%f"
+                           (dired-directory dired-directory "%b")))
   (setq make-backup-files nil)
   (setq auto-save-default nil)
   (if (eq system-type 'darwin)
       (setq default-directory "~/"))
   (setq read-process-output-max (* 1024 1024)
-	gc-cons-percentage 0.1
-	gc-cons-threshold (* 1024 1024 64))
+        gc-cons-percentage 0.1
+        gc-cons-threshold (* 1024 1024 64))
   :diminish eldoc-mode
   :bind
   (("S-SPC" . set-mark-command)
@@ -133,44 +133,44 @@
   :hook
   (((prog-mode conf-mode nxml-mode markdown-mode help-mode)
     . (lambda ()
-	(setq-local composition-function-table
-		    composition-ligature-table))))
+        (setq-local composition-function-table
+                    composition-ligature-table))))
   :config
   ;; support ligatures, some toned down to prevent hang
   (when (version<= "27.0" emacs-version)
     (let ((alist
-	   '((33 . ".\\(?:\\(==\\|[!=]\\)[!=]?\\)")
-	     (35 . ".\\(?:\\(###?\\|_(\\|[(:=?[_{]\\)[#(:=?[_{]?\\)")
-	     (36 . ".\\(?:\\(>\\)>?\\)")
-	     (37 . ".\\(?:\\(%\\)%?\\)")
-	     (38 . ".\\(?:\\(&\\)&?\\)")
-	     (42 . ".\\(?:\\(\\*\\*\\|[*>]\\)[*>]?\\)")
-	     ;; (42 . ".\\(?:\\(\\*\\*\\|[*/>]\\).?\\)")
-	     (43 . ".\\(?:\\([>]\\)>?\\)")
-	     ;; (43 . ".\\(?:\\(\\+\\+\\|[+>]\\).?\\)")
-	     (45 . ".\\(?:\\(-[->]\\|<<\\|>>\\|[-<>|~]\\)[-<>|~]?\\)")
-	     ;; (46 . ".\\(?:\\(\\.[.<]\\|[-.=]\\)[-.<=]?\\)")
-	     (46 . ".\\(?:\\(\\.<\\|[-=]\\)[-<=]?\\)")
-	     (47 . ".\\(?:\\(//\\|==\\|[=>]\\)[/=>]?\\)")
-	     ;; (47 . ".\\(?:\\(//\\|==\\|[*/=>]\\).?\\)")
-	     (48 . ".\\(?:\\(x[a-fA-F0-9]\\).?\\)")
-	     ;; (58 . ".\\(?:\\(::\\|[:<=>]\\)[:<=>]?\\)")
-	     (59 . ".\\(?:\\(;\\);?\\)")
-	     (60 . ".\\(?:\\(!--\\|\\$>\\|\\*>\\|\\+>\\|-[-<>|]\\|/>\\|<[-<=]\\|=[<>|]\\|==>?\\||>\\||||?\\|~[>~]\\|[$*+/:<=>|~-]\\)[$*+/:<=>|~-]?\\)")
-	     (61 . ".\\(?:\\(!=\\|/=\\|:=\\|<<\\|=[=>]\\|>>\\|[=>]\\)[=<>]?\\)")
-	     (62 . ".\\(?:\\(->\\|=>\\|>[-=>]\\|[-:=>]\\)[-:=>]?\\)")
-	     (63 . ".\\(?:\\([.:=?]\\)[.:=?]?\\)")
-	     (91 . ".\\(?:\\(|\\)[]|]?\\)")
-	     ;; (92 . ".\\(?:\\([\\n]\\)[\\]?\\)")
-	     (94 . ".\\(?:\\(=\\)=?\\)")
-	     (95 . ".\\(?:\\(|_\\|[_]\\)_?\\)")
-	     (119 . ".\\(?:\\(ww\\)w?\\)")
-	     (123 . ".\\(?:\\(|\\)[|}]?\\)")
-	     (124 . ".\\(?:\\(->\\|=>\\||[-=>]\\||||*>\\|[]=>|}-]\\).?\\)")
-	     (126 . ".\\(?:\\(~>\\|[-=>@~]\\)[-=>@~]?\\)"))))
+           '((33 . ".\\(?:\\(==\\|[!=]\\)[!=]?\\)")
+             (35 . ".\\(?:\\(###?\\|_(\\|[(:=?[_{]\\)[#(:=?[_{]?\\)")
+             (36 . ".\\(?:\\(>\\)>?\\)")
+             (37 . ".\\(?:\\(%\\)%?\\)")
+             (38 . ".\\(?:\\(&\\)&?\\)")
+             (42 . ".\\(?:\\(\\*\\*\\|[*>]\\)[*>]?\\)")
+             ;; (42 . ".\\(?:\\(\\*\\*\\|[*/>]\\).?\\)")
+             (43 . ".\\(?:\\([>]\\)>?\\)")
+             ;; (43 . ".\\(?:\\(\\+\\+\\|[+>]\\).?\\)")
+             (45 . ".\\(?:\\(-[->]\\|<<\\|>>\\|[-<>|~]\\)[-<>|~]?\\)")
+             ;; (46 . ".\\(?:\\(\\.[.<]\\|[-.=]\\)[-.<=]?\\)")
+             (46 . ".\\(?:\\(\\.<\\|[-=]\\)[-<=]?\\)")
+             (47 . ".\\(?:\\(//\\|==\\|[=>]\\)[/=>]?\\)")
+             ;; (47 . ".\\(?:\\(//\\|==\\|[*/=>]\\).?\\)")
+             (48 . ".\\(?:\\(x[a-fA-F0-9]\\).?\\)")
+             ;; (58 . ".\\(?:\\(::\\|[:<=>]\\)[:<=>]?\\)")
+             (59 . ".\\(?:\\(;\\);?\\)")
+             (60 . ".\\(?:\\(!--\\|\\$>\\|\\*>\\|\\+>\\|-[-<>|]\\|/>\\|<[-<=]\\|=[<>|]\\|==>?\\||>\\||||?\\|~[>~]\\|[$*+/:<=>|~-]\\)[$*+/:<=>|~-]?\\)")
+             (61 . ".\\(?:\\(!=\\|/=\\|:=\\|<<\\|=[=>]\\|>>\\|[=>]\\)[=<>]?\\)")
+             (62 . ".\\(?:\\(->\\|=>\\|>[-=>]\\|[-:=>]\\)[-:=>]?\\)")
+             (63 . ".\\(?:\\([.:=?]\\)[.:=?]?\\)")
+             (91 . ".\\(?:\\(|\\)[]|]?\\)")
+             ;; (92 . ".\\(?:\\([\\n]\\)[\\]?\\)")
+             (94 . ".\\(?:\\(=\\)=?\\)")
+             (95 . ".\\(?:\\(|_\\|[_]\\)_?\\)")
+             (119 . ".\\(?:\\(ww\\)w?\\)")
+             (123 . ".\\(?:\\(|\\)[|}]?\\)")
+             (124 . ".\\(?:\\(->\\|=>\\||[-=>]\\||||*>\\|[]=>|}-]\\).?\\)")
+             (126 . ".\\(?:\\(~>\\|[-=>@~]\\)[-=>@~]?\\)"))))
       (dolist (char-regexp alist)
-	(set-char-table-range composition-ligature-table (car char-regexp)
-			      `([,(cdr char-regexp) 0 font-shape-gstring]))))
+        (set-char-table-range composition-ligature-table (car char-regexp)
+                              `([,(cdr char-regexp) 0 font-shape-gstring]))))
     (set-char-table-parent composition-ligature-table composition-function-table)))
 
 ;;; UI and modeline
@@ -179,7 +179,7 @@
   :ensure t
   :config
   (setq doom-themes-enable-bold t
-	doom-themes-enable-italic t)
+        doom-themes-enable-italic t)
   (load-theme 'doom-one t)
 
   (doom-themes-visual-bell-config)
@@ -227,7 +227,7 @@
 (use-package marginalia
   :ensure t
   :bind (:map minibuffer-local-map
-	      ("M-A" . marginalia-cycle))
+              ("M-A" . marginalia-cycle))
   :init
   (marginalia-mode))
 
@@ -235,20 +235,20 @@
   :after vertico
   :ensure nil
   :bind (:map vertico-map
-	      ("RET" . vertico-directory-enter)
-	      ("DEL" . vertico-directory-delete-char)
-	      ("M-DEL" . vertico-directory-delete-word))
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 (use-package consult
   :ensure t
   :bind (("C-x b" . consult-buffer)
-	 ("M-y" . consult-yank-pop)))
+         ("M-y" . consult-yank-pop)))
 
 (use-package embark
   :ensure t
   :bind (("C-." . embark-act)
-	 ("C-c e" . embark-dwim)))
+         ("C-c e" . embark-dwim)))
 
 (use-package embark-consult
   :ensure t
@@ -259,8 +259,8 @@
   :ensure t
   :init
   (setq completion-styles '(orderless basic)
-	completion-category-defaults nil
-	completion-category-overrides '((file styles partial-completion))))
+        completion-category-defaults nil
+        completion-category-overrides '((file styles partial-completion))))
 
 (use-package corfu
   :ensure t
@@ -277,22 +277,22 @@
 (use-package cape
   :ensure t
   :bind (("C-c . p" . completion-at-point)
-	 ("C-c . t" . complete-tag)
-	 ("C-c . d" . cape-dabbrev)
-	 ("C-c . h" . cape-history)
-	 ("C-c . f" . cape-file)
-	 ("C-c . k" . cape-keyword)
-	 ("C-c . s" . cape-elisp-symbol)
-	 ("C-c . e" . cape-elisp-block)
-	 ("C-c . a" . cape-abbrev)
-	 ("C-c . l" . cape-line)
-	 ("C-c . w" . cape-dict)
-	 ("C-c . :" . cape-emoji)
-	 ("C-c . \\" . cape-tex)
-	 ("C-c . _" . cape-tex)
-	 ("C-c . ^" . cape-tex)
-	 ("C-c . &" . cape-sgml)
-	 ("C-c . r" . cape-rfc1345))
+         ("C-c . t" . complete-tag)
+         ("C-c . d" . cape-dabbrev)
+         ("C-c . h" . cape-history)
+         ("C-c . f" . cape-file)
+         ("C-c . k" . cape-keyword)
+         ("C-c . s" . cape-elisp-symbol)
+         ("C-c . e" . cape-elisp-block)
+         ("C-c . a" . cape-abbrev)
+         ("C-c . l" . cape-line)
+         ("C-c . w" . cape-dict)
+         ("C-c . :" . cape-emoji)
+         ("C-c . \\" . cape-tex)
+         ("C-c . _" . cape-tex)
+         ("C-c . ^" . cape-tex)
+         ("C-c . &" . cape-sgml)
+         ("C-c . r" . cape-rfc1345))
   :init
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
@@ -305,7 +305,7 @@
 
 (use-package dabbrev
   :bind (("M-/" . dabbrev-completion)
-	 ("C-M-/" . dabbrev-expand))
+         ("C-M-/" . dabbrev-expand))
   :custom
   (dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
 
@@ -336,17 +336,17 @@
 (use-package align
   :commands align
   :bind (("M-[" . align-code)
-	 ("C-c [" . align-regexp))
+         ("C-c [" . align-regexp))
   :custom
   (align-to-tab-stop nil)
   :preface
   (defun align-code (beg end &optional arg)
     (interactive "rP")
     (if (null arg)
-	(align beg end)
+        (align beg end)
       (let ((end-mark (copy-marker end)))
-	(indent-region beg end-mark nil)
-	(align beg end-mark)))))
+        (indent-region beg end-mark nil)
+        (align beg end-mark)))))
 
 (use-package project
   :defer t)
@@ -359,7 +359,7 @@
 (use-package diff-hl
   :ensure t
   :hook ((prog-mode . diff-hl-mode)
-	 (dired-mode . diff-hl-dired-mode))
+         (dired-mode . diff-hl-dired-mode))
   :config
   (unless (display-graphic-p)
     (diff-hl-margin-mode 1)))
@@ -370,7 +370,7 @@
   :ensure t
   :config
   (setf (alist-get 'rustfmt apheleia-formatters)
-	'("rustfmt" "+nightly" "--quiet" "--emit" "stdout")))
+        '("rustfmt" "+nightly" "--quiet" "--emit" "stdout")))
 
 ;;; Languages and tooling
 
@@ -384,13 +384,13 @@
 
 (use-package cc-mode
   :hook (((c++-mode c-mode) .
-	  (lambda () (setq indent-tabs-mode nil c-basic-offset 4)))))
+          (lambda () (setq indent-tabs-mode nil c-basic-offset 4)))))
 
 (use-package lua-mode
   :ensure t
   :defer t
   :hook (lua-mode . (lambda ()
-		      (electric-indent-local-mode -1))))
+                      (electric-indent-local-mode -1))))
 
 (use-package cmake-mode
   :ensure t
@@ -413,8 +413,8 @@
   :hook
   ((wgsl-mode
     . (lambda ()
-	(c-set-offset 'arglist-intro '+)
-	(c-set-offset 'arglist-close 0)))))
+        (c-set-offset 'arglist-intro '+)
+        (c-set-offset 'arglist-close 0)))))
 
 (use-package yaml-mode
   :ensure t
@@ -426,14 +426,14 @@
   :preface
   (defvar haskell-compile-cabal-build-command)
   :hook (haskell-mode
-	 . (lambda ()
-	     (haskell-indentation-mode)
-	     (setq haskell-compile-cabal-build-command "stack build")))
+         . (lambda ()
+             (haskell-indentation-mode)
+             (setq haskell-compile-cabal-build-command "stack build")))
   :bind (:map haskell-mode-map
-	      ("C-c C-c C-b" . haskell-compile)
-	      ("C-c C-f" . apheleia-format-buffer)
-	      :map haskell-cabal-mode-map
-	      ("C-c C-c C-b" . haskell-compile)))
+              ("C-c C-c C-b" . haskell-compile)
+              ("C-c C-f" . apheleia-format-buffer)
+              :map haskell-cabal-mode-map
+              ("C-c C-c C-b" . haskell-compile)))
 
 (use-package typescript-mode
   :ensure t
@@ -464,10 +464,10 @@
   (eglot-autoshutdown t)
   :bind
   (:map eglot-mode-map
-	("C-c a a" . eglot-code-actions)
-	("C-c a o" . eglot-code-action-organize-imports)
-	("C-c a r" . eglot-rename)
-	("C-c h"   . eldoc))
+        ("C-c a a" . eglot-code-actions)
+        ("C-c a o" . eglot-code-action-organize-imports)
+        ("C-c a r" . eglot-rename)
+        ("C-c h"   . eldoc))
   :hook
   (((rust-mode haskell-mode)
     . eglot-ensure)))
@@ -479,7 +479,7 @@
   (rustic-rustfmt-bin "rustfmt")
   (rustic-rustfmt-args "+nightly")
   :bind (:map rustic-mode-map
-	      ("C-c C-f" . apheleia-format-buffer))
+              ("C-c C-f" . apheleia-format-buffer))
   :hook (rust-mode . (lambda () (setq indent-tabs-mode nil))))
 
 (use-package dape
@@ -799,9 +799,9 @@ Call after changing Cargo.toml or switching features."
   :defer t
   :ensure t
   :bind (("C-c n f" . org-roam-node-find)
-	 ("C-c n i" . org-roam-node-insert)
-	 ("C-c n t" . org-roam-buffer-toggle)
-	 ("C-c n s" . consult-org-roam-search))
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n t" . org-roam-buffer-toggle)
+         ("C-c n s" . consult-org-roam-search))
   :config
   (setq org-roam-directory "~/notes/")
   (org-roam-db-autosync-mode 1))
