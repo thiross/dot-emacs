@@ -7,6 +7,8 @@
 
 (require 'package)
 
+(setq package-install-upgrade-built-in t)
+
 (require 'use-package)
 
 (setq package-selected-packages
@@ -44,9 +46,11 @@
 	markdown-mode
 	elm-mode
 	dhall-mode
+	eglot
 	rustic
 	dape
 	org-roam
+	consult-org-roam
 	org-modern))
 
 (use-package diminish
@@ -454,6 +458,7 @@
 ;;; Rust and LSP
 
 (use-package eglot
+  :ensure t
   :custom
   (eldoc-echo-area-use-multiline-p nil)
   (eglot-autoshutdown t)
@@ -795,10 +800,19 @@ Call after changing Cargo.toml or switching features."
   :ensure t
   :bind (("C-c n f" . org-roam-node-find)
 	 ("C-c n i" . org-roam-node-insert)
-	 ("C-c n t" . org-roam-buffer-toggle))
+	 ("C-c n t" . org-roam-buffer-toggle)
+	 ("C-c n s" . consult-org-roam-search))
   :config
   (setq org-roam-directory "~/notes/")
   (org-roam-db-autosync-mode 1))
+
+(use-package consult-org-roam
+  :ensure t
+  :after org-roam
+  :custom
+  (consult-org-roam-grep-func #'consult-ripgrep)
+  :config
+  (consult-org-roam-mode 1))
 
 (use-package org-modern
   :ensure t
