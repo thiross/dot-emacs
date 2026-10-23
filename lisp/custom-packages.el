@@ -474,6 +474,8 @@
 
 (use-package rustic
   :ensure t
+  :init
+  (setq rust-mode-treesitter-derive t)
   :custom
   (rustic-lsp-client 'eglot)
   (rustic-rustfmt-bin "rustfmt")
