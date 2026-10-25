@@ -784,6 +784,7 @@ Call after changing Cargo.toml or switching features."
   :defer t
   :custom
   (org-latex-compiler "xelatex")
+  (org-preview-latex-default-process 'xelatex)
   (org-export-backends '(ascii html icalendar latex beamer md)))
 
 (use-package org-babel
@@ -795,7 +796,9 @@ Call after changing Cargo.toml or switching features."
    '((emacs-lisp . t)
      (haskell . t)
      (latex . t)
-     (python . t))))
+     (python . t)))
+  (setq org-babel-latex-pdf-svg-process
+        "gs -q -dNOPAUSE -dBATCH -sDEVICE=eps2write -sOutputFile=%O.eps %f && dvisvgm --eps --no-fonts --exact-bbox --output=%O %O.eps && rm -f %O.eps"))
 
 (use-package org-roam
   :defer t
