@@ -61,14 +61,16 @@
 
 (use-package emacs
   :init
-  (let* ((font-name "Maple Mono")
+  (let* ((font-name "Fira Code Retina")
          (en (cond ((eq system-type 'darwin)
                     (font-spec :family font-name
                                :size 15
                                :weight 'normal))
                    ((eq system-type 'gnu/linux)
+                    ;; Integer font sizes are pixels, avoiding X11 DPI
+                    ;; conversion differences on WSL.
                     (font-spec :family font-name
-                               :size 18.0
+                               :size 23
                                :weight 'normal))
                    (t
                     (font-spec :family font-name
