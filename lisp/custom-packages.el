@@ -67,10 +67,10 @@
                                :size 15
                                :weight 'normal))
                    ((eq system-type 'gnu/linux)
-                    ;; Integer font sizes are pixels, avoiding X11 DPI
-                    ;; conversion differences on WSL.
+                    ;; Use points so native Wayland rendering follows
+                    ;; the monitor's scale factor.
                     (font-spec :family font-name
-                               :size 23
+                               :size 9.0
                                :weight 'normal))
                    (t
                     (font-spec :family font-name
@@ -81,7 +81,7 @@
                                :size 15.0))
                    ((eq system-type 'gnu/linux)
                     (font-spec :family "微软雅黑"
-                               :size 16.0))
+                               :size 8.0))
                    (t
                     (font-spec :family "微软雅黑"
                                :size 8.0)))))
@@ -108,9 +108,8 @@
         (setq initial-frame-alist
               '((width . 80)
                 (height . 30)))
-        (setq default-frame-alist
-              '((width . 80)
-                (height . 30)))
+        (setf (alist-get 'width default-frame-alist) 80
+              (alist-get 'height default-frame-alist) 30)
         ))
   (setq frame-title-format
         '(buffer-file-name "%f"
