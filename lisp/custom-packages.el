@@ -61,7 +61,7 @@
 
 (use-package emacs
   :init
-  (let* ((font-name "Fira Code Retina")
+  (let* ((font-name "Maple Mono")
          (en (cond ((eq system-type 'darwin)
                     (font-spec :family font-name
                                :size 15
@@ -70,7 +70,7 @@
                     ;; Use points so native Wayland rendering follows
                     ;; the monitor's scale factor.
                     (font-spec :family font-name
-                               :size 9.0
+                               :size 10.0
                                :weight 'normal))
                    (t
                     (font-spec :family font-name
